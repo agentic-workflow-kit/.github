@@ -7,14 +7,15 @@
 independently useful, but together they form a lifecycle for turning software intent into designed,
 implemented, reviewed, and improved systems.
 
-This organization carries the methodology and product layers. The workflow engine/tooling itself is
-developed separately.
+This organization carries the full lifecycle as standalone products — from product definition through
+technical design to delivery. **Jig**, the delivery/execution engine, is the suite's main product and
+lives here.
 
 ## Why Polyrepo
 
 Each layer has its own maturity curve, release cadence, and audience. Keeping the layers as separate
-repositories makes adoption easier: use the design layer without adopting the product layer, or use
-the productized experience without pulling in internal delivery tooling.
+repositories makes adoption easier: use the design layer on its own, or run the delivery engine
+without adopting the upstream layers.
 
 The trade-off is convention drift. This org keeps shared conventions explicit and lightweight so each
 repo can stay focused without inventing its own vocabulary.
@@ -24,17 +25,17 @@ repo can stay focused without inventing its own vocabulary.
 | Repo | Role | Status |
 | --- | --- | --- |
 | [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs. | Ready locally; GitHub shell prepared |
-| [`jig`](https://github.com/agentic-workflow-kit/jig) | Productized face of the suite: main package, supporting products, and learning loop. | Early / planned |
+| [`jig`](https://github.com/agentic-workflow-kit/jig) | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; product layer drafted, design/impl next |
 | Product layer | Define-product and PRD authoring upstream of design. | Planned |
-| Delivery layer | Decompose design into tracker-backed implementation. | Planned |
+| Planning layer | Decompose design into the execution plan Jig runs. | Planned |
 | Learning loop | Capture run outcomes and feed them back into future work. | Planned |
 
 ## Lifecycle
 
 ```text
 PRODUCT ---------> DESIGN ----------> DELIVERY --------> LEARNING
-define / PRD       technical-design   plan / implement   feedback loop
-                   repo               on the engine      back into layers
+define / PRD       technical-design   plan -> jig (run)  feedback loop
+                   repo               this org           back into layers
 ```
 
 The repos are meant to compose without becoming tightly coupled. Each should have a crisp purpose,
@@ -51,10 +52,10 @@ The shared vocabulary is intentionally small:
 
 ## Current Focus
 
-The first public layer is `technical-design`: a set of AI skills for right-sized architecture,
-reviewable decisions, and enforceable boundaries. `jig` is the planned product surface that will make
-the broader suite approachable as a cohesive experience.
+The first design-stage layer is `technical-design`: a set of AI skills for right-sized architecture,
+reviewable decisions, and enforceable boundaries. `jig`, the suite's execution engine, now has its
+product layer drafted; its engineering design and implementation are being built next.
 
 Start with [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) for the
-design-stage skills, or follow [`jig`](https://github.com/agentic-workflow-kit/jig) for the product
-surface as it takes shape.
+design-stage skills, or follow [`jig`](https://github.com/agentic-workflow-kit/jig) — the execution
+engine — as it takes shape.
