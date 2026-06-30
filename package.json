@@ -4,9 +4,17 @@
   "description": "Organization profile, community health files, and repository standards for agentic-workflow-kit.",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.5.1",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.0",
+    "pnpm": ">=11.9.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^26",
+      "onFail": "warn"
+    }
   },
   "scripts": {
     "format": "prettier --write \"**/*.{md,yml,yaml,json}\"",
