@@ -72,6 +72,28 @@ support claim is verified — pin it explicitly, since a range like `>=22` resol
 satisfying version, not the floor — `actions/cache@v6`, pnpm 11.5.1, a repo-local `.pnpm-store`,
 and `pnpm --config.store-dir="$PNPM_STORE_DIR" check`.
 
+### Engine-archetype tooling
+
+The check gate varies by archetype, the same way the source tier does. Docs-only and skills-pack
+repos keep `pnpm check` as a prettier formatting gate over Markdown/YAML/JSON. An **engine** repo,
+the moment it grows real TypeScript source, adopts the engine tooling standard — this is
+**archetype-scoped, not optional**: every engine conforms, and docs/skills repos must not adopt it.
+
+- **Lint/format stance: biome for code, prettier for docs.** biome formats, lints, and sorts
+  imports for TS/JS/JSON; prettier keeps Markdown/YAML. Each repo runs one formatter per file type,
+  so there is no in-repo conflict.
+- **Type and test gate:** `tsc -b` (strict, `NodeNext`, project-referenced) plus vitest with a 90%
+  coverage floor (aim 95%) — consistent with the test-driven rule once code exists.
+- **Composed gate:** `check` runs `lint` (`biome check .`) + `format:check` (prettier on docs) +
+  `typecheck` + `test`.
+
+The canonical, validated configs live in
+[`repo-template/archetypes/engine/`](https://github.com/agentic-workflow-kit/repo-template/tree/main/archetypes/engine)
+(`biome.json`, `tsconfig.base.json`, `tsconfig.json`, `vitest.config.ts` + an adoption guide),
+validated end-to-end on Node 26 with biome 2.5, TypeScript 6, and vitest 4. turbo,
+dependency-cruiser, and monorepo project references are deliberately deferred until a repo's weight
+earns them.
+
 ## Developer setup and worktrees
 
 Setup and worktree management are two layers: a setup step prepares one checkout to install, build,
