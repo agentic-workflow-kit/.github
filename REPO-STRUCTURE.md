@@ -139,12 +139,19 @@ archived report for the `git clone --bare` walkthrough.
 
 ### pnpm store policy
 
-Our repos are single-package with light dependencies, so pnpm's fast-worktree store optimizations
-are not needed yet. Use the default global store; it is shared across a developer's worktrees within
-one trust boundary. Two rules carry forward: a shared writable store assumes mutual trust — do not
-share one store across untrusted agents or users; and revisit `enableGlobalVirtualStore` only if a
-repo grows heavy dependencies and runs many parallel worktrees. Until then, a frozen `pnpm install`
-per worktree (driven by `dev:setup`) is enough.
+The default global store is shared across a developer's worktrees within one trust boundary, and a
+frozen `pnpm install` per worktree (driven by `dev:setup`) is the baseline. Two rules always carry
+forward: a shared writable store assumes mutual trust — **do not share one store across untrusted
+agents or users**; and the lockfile is committed so every worktree resolves identically.
+
+**Engine repos enable `enableGlobalVirtualStore: true` in `pnpm-workspace.yaml`.** Once a repo
+carries a real dependency tree (an engine's biome + TypeScript + vitest toolchain is already ~70
+packages) and is worked in more than one concurrent worktree, the global virtual store makes each
+worktree's `node_modules` symlink-only into a single content-addressable store, so the first install
+populates it and every later worktree install is near-instant. This is pnpm's headline worktree
+optimization ([pnpm.io/git-worktrees](https://pnpm.io/git-worktrees)). **Docs-only and skills-pack
+repos skip it** — their dependency footprint is too light to benefit, and the default store is
+simpler. It is a local-dev accelerator only; CI runs a single checkout and is unaffected.
 
 ## Contributor contract (AGENTS.md)
 
