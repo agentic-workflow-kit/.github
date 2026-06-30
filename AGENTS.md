@@ -10,6 +10,8 @@ standards:
 - **`REPO-STRUCTURE.md`** — repo layout, package/check standard, Node/pnpm policy, repo
   settings, and the self-contained `AGENTS.md` contract standard.
 - **`ROADMAP.md`** — the lifecycle, the seam-ownership map, and per-layer status and references.
+- **`MILESTONES.md`** — the sequence-based org planning source that repo owners derive
+  local plans from.
 - **`profile/`** and the shared `CONTRIBUTING` / `CODE_OF_CONDUCT` / `SECURITY` / templates.
 
 When a standard changes, change it **here**. Each product repo keeps a self-contained `AGENTS.md`

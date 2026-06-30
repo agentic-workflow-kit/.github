@@ -9,6 +9,10 @@ implementation` independently.
 The org contract is [`AGENTS.md`](./AGENTS.md); the repo layout standard is
 [`REPO-STRUCTURE.md`](./REPO-STRUCTURE.md).
 
+For execution order, use [`MILESTONES.md`](./MILESTONES.md). This roadmap names the layers
+and seams; milestones define the sequence of org outcomes and the handoff model each repo
+uses to derive its local plan.
+
 ---
 
 ## The lifecycle
@@ -47,7 +51,7 @@ internals. Most seams are owned by the two layers that already exist.
 **Sequencing rule of thumb:** the highest-leverage early work is authoring Jig's two seams
 (execution-plan schema, observability records), because two downstream layers wait on their
 _shape_ — not their implementation. Define the contracts first; build behind them in
-parallel.
+parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
 
 ---
 
@@ -60,6 +64,10 @@ parallel.
   invokable as `agentic-workflow-kit:<skill>`). These are working reference implementations of
   the planned upstream layers — design from them, do not assume they are the target shape.
 - Curate references **per layer**; do not import the whole legacy corpus into a repo.
+- **New layers start fresh, to standard.** Scaffold a new repo from `repo-template` (inheriting
+  the `AGENTS.md` contract, tooling, and `pnpm check` gate), then define its product first
+  (`define-product` / PRD with ID'd acceptance criteria) before design and implementation. The
+  legacy prototype and plugin skills inform this only as reference.
 
 ---
 
@@ -152,6 +160,10 @@ parallel.
 
 The only true ordering constraint is _contract-shape_, not _implementation_: Planning and
 Learning need the **shape** of Jig's seams, not finished Jig code.
+
+Repo-level plans should derive from the active milestone rather than expanding this roadmap into
+a centralized backlog. The repo owner records its local plan in that repo, including what it owns,
+what it consumes, and what it must not decide.
 
 ---
 
