@@ -106,6 +106,12 @@ Default repo policy is `main`-based:
 - Squash merge is the only enabled merge method; merged branches are deleted automatically.
 - Actions run with read-only default workflow permissions.
 
+Branch rules are enforced by a repository ruleset on `main`; merge methods and workflow permissions
+are repo settings. Because a GitHub template repository copies files but **not** settings, all of
+this is applied reproducibly by `scripts/apply-repo-standard.sh <owner>/<repo>` in the
+[`repo-template`](https://github.com/agentic-workflow-kit/repo-template) repo (idempotent — updates
+the existing `main` ruleset if present, else creates it).
+
 Stricter supply-chain policy, such as SHA-pinned Actions or selected-actions allowlists, is a future
 hardening step and is not part of the default moderate baseline.
 
@@ -118,6 +124,20 @@ hardening step and is not part of the default moderate baseline.
   not invent product or design scope.
 - Reference material copied from another repo is read-only unless the repo explicitly owns it. Mark
   such snapshots as references, not runtime dependencies.
+
+## Starting a new repo
+
+Use the [`repo-template`](https://github.com/agentic-workflow-kit/repo-template) repository (the
+"Use this template" button on GitHub). It carries the standard spine — `README`, `docs/` altitude
+index, self-contained `AGENTS.md` + `CLAUDE.md`, `package.json`, `.nvmrc`, `check.yml`, `LICENSE`,
+and ignore files. After creating the repo:
+
+1. Replace the `<repo>` placeholders and delete the "using this template" block in `README.md`.
+2. Add your archetype's source tier beside `docs/` (engine: `packages/` or `src/` plus `tests/`;
+   skills pack: `skills/`, `methodologies/`, `evals/`; docs-only: nothing extra).
+3. Apply the settings standard (which the template does not copy):
+   `bash scripts/apply-repo-standard.sh <owner>/<repo>`.
+4. Run `pnpm check` to confirm the gate is green.
 
 ## Adopting the standard in an existing repo
 
