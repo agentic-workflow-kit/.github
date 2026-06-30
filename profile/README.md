@@ -22,13 +22,13 @@ repo can stay focused without inventing its own vocabulary.
 
 ## Repositories
 
-| Repo | Role | Status |
-| --- | --- | --- |
-| [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs. | Ready locally; GitHub shell prepared |
-| [`jig`](https://github.com/agentic-workflow-kit/jig) | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; product layer drafted, design/impl next |
-| Product layer | Define-product and PRD authoring upstream of design. | Planned |
-| Planning layer | Decompose design into the execution plan Jig runs. | Planned |
-| Learning loop | Capture run outcomes and feed them back into future work. | Planned |
+| Repo                                                                           | Role                                                                                                                                                              | Status                                         |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs.                                                                             | Ready locally; GitHub shell prepared           |
+| [`jig`](https://github.com/agentic-workflow-kit/jig)                           | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; product layer drafted, design/impl next |
+| Product layer                                                                  | Define-product and PRD authoring upstream of design.                                                                                                              | Planned                                        |
+| Planning layer                                                                 | Decompose design into the execution plan Jig runs.                                                                                                                | Planned                                        |
+| Learning loop                                                                  | Capture run outcomes and feed them back into future work.                                                                                                         | Planned                                        |
 
 ## Lifecycle
 
