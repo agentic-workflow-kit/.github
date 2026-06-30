@@ -10,6 +10,9 @@ This repository owns the public organization profile and default community healt
   [pull request template](.github/PULL_REQUEST_TEMPLATE.md) provide the default contribution flow.
 - [`REPO-STRUCTURE.md`](REPO-STRUCTURE.md) defines the default repository layout:
   `README.md`, `docs/product`, `docs/design`, and source tier.
+- [`ROADMAP.md`](ROADMAP.md) defines the lifecycle layers and shared seam ownership.
+- [`MILESTONES.md`](MILESTONES.md) defines the sequence-based org planning milestones that
+  product repos derive local plans from.
 
 Repository-specific files override these defaults when a project needs its own policy.
 

@@ -41,6 +41,9 @@ define / PRD       technical-design   plan -> jig (run)  feedback loop
 The repos are meant to compose without becoming tightly coupled. Each should have a crisp purpose,
 clear inputs and outputs, and enough documentation to be useful in isolation.
 
+The org roadmap is sequence-based rather than calendar-based: shared milestones define the next
+outcome and seam to stabilize, then each repo derives its own local plan from that milestone.
+
 ## Shared Conventions
 
 The shared vocabulary is intentionally small:
