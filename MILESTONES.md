@@ -309,30 +309,79 @@ before any design or implementation:
 - Owned seam or artifact:
   - Local runner behavior behind the execution-plan and run-record contracts
   - Policy and approval behavior for the first supported local mode
+- Approach: `jig/docs/design/` currently names only the two seam contracts (execution-plan
+  v0, observability-records v0); nothing yet names runner behavior, the execution host, or
+  the policy posture, so entry criterion 3 below is unmet. M5 splits into a design slice
+  before an implementation slice so that gap closes before code commits around it:
+  - M5a — a jig-local design slice that names the full local-runtime architecture at high
+    altitude: plan validation, preview, eligibility/DAG, the runner/worker authority
+    boundary, the authorization/fence, the state machine, the record store, policy, and the
+    four drivers (agent, execution-host, forge, work-source). M5a marks each seam with a
+    posture so later slices know what they are accountable for now versus later, and it is
+    what satisfies entry criterion 3.
+  - M5b — implement only the seams M5a marks `exercised`, as a thin walking skeleton, with
+    fixtures and tests. Seams marked `named extension point` stay design-only until a later
+    slice exercises them.
+
+  | Seam                              | M5 posture            |
+  | --------------------------------- | --------------------- |
+  | Plan validation and preview       | exercised             |
+  | Eligibility / DAG resolution      | exercised             |
+  | Runner/worker authority boundary  | exercised             |
+  | Authorization / fence             | exercised             |
+  | State machine (named run states)  | exercised             |
+  | Record store (M1 record shape)    | exercised             |
+  | Policy (minimum posture for v0)   | exercised             |
+  | Agent driver                      | named extension point |
+  | Execution-host driver (non-local) | named extension point |
+  | Forge driver                      | named extension point |
+  | Work-source driver                | named extension point |
+  | Resume                            | named extension point |
+  | Capability attestation            | named extension point |
+
+  A seam being `exercised` here means built and tested as part of M5b's dry-run path, not
+  that every behavior it could ever have is final. The local execution host and the policy
+  posture are themselves exercised seams: M5a must name them concretely enough for M5b to
+  build the minimal local case, even though richer hosts and policies stay extension points.
+
 - Entry criteria:
   - M1 is done.
-  - M4 has produced a sample execution plan shape fixture.
+  - M4 has produced a sample execution plan shape fixture (the shape, not a ready-to-parse
+    instance — see Artifacts).
   - Jig design has named the first local execution host and the minimum policy posture.
+    Unmet as of this milestone's current state; M5a closes it.
 - Exit criteria:
-  - Jig can validate and preview one minimal execution plan.
-  - Jig can execute a constrained local run or a dry-run equivalent under policy.
-  - Jig emits durable records matching the M1 record shape.
+  - Jig validates and previews one minimal, machine-readable execution-plan instance.
+  - Jig executes that plan as a dry-run under policy: no privileged action (push, PR
+    creation, merge) fires.
+  - Even in the dry-run, the run invokes the authorization/fence and emits the
+    requested -> authorized/denied -> runner-owned records. The authority boundary is
+    exercised, not bypassed — this is the line between a meaningful slice and a hollow one.
+  - Jig emits durable records matching the M1 observability record shape.
   - The run ends in named, inspectable states.
-  - The repo has tests appropriate to the implemented surface.
+  - Tests appropriate to the exercised surface. This is jig's first real package: `pnpm check`
+    grows from prettier-only to include lint, typecheck, and test, with TDD coverage at 90%+.
 - Artifacts:
   - Minimal CLI or runnable entry point
-  - Plan fixture
+  - Plan fixture — the machine-readable execution-plan instance is M5's own artifact; M4
+    handed off only the plan shape, not an instance ready to parse.
   - Policy fixture
   - Run-record fixture
   - Tests and verification docs
 - Repo planning handoff:
-  - `jig` derives implementation stories from its design docs.
+  - `jig` derives implementation stories from its design docs, including the M5a/M5b split
+    above.
   - `design-to-plan` provides only the sample plan fixture shape until broader integration is
     planned.
 - Risks / kill assumptions:
   - Fails if the MVP bypasses the runner/worker authority boundary for convenience.
   - Fails if records are useful only for debugging and not for Learning consumers.
   - Fails if "minimal" expands into multi-driver portability before the local path proves out.
+  - Fails if "design fully, fill later" produces unexercised no-op code stubs for seams the
+    dry-run never traverses (resume, capability attestation, multi-driver, forge); those stay
+    named extension points in the design doc only, never code, until a later slice exercises
+    them. The authorization no-op is different: it is on the executed dry-run path and emits
+    its records.
 - Evidence when landed:
   - Jig PR merged with tests and `pnpm check` green.
   - The sample run record can be cited by Learning-loop design.
