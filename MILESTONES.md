@@ -292,8 +292,8 @@ before any design or implementation:
   - Fails if plan output proves shape but not dependency closure.
   - Fails if producer/consumer relationships are implicit.
 - Evidence when landed:
-  - `design-to-plan` PR #1 opened with the docs-only Planning-layer seed and `check` green.
-  - `.github` PR #12 wires the roadmap, milestones, and profile updates with `check` green.
+  - `design-to-plan` PR #1 merged with the docs-only Planning-layer seed and `check` green.
+  - `.github` PR #12 merged with roadmap, milestone, and profile updates and `check` green.
   - The sample plan fixture is traceable from PRD IDs through technical-design IDs to Jig v0 plan
     properties.
 
