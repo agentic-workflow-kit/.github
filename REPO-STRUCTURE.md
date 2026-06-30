@@ -72,6 +72,58 @@ support claim is verified — pin it explicitly, since a range like `>=22` resol
 satisfying version, not the floor — `actions/cache@v6`, pnpm 11.5.1, a repo-local `.pnpm-store`,
 and `pnpm --config.store-dir="$PNPM_STORE_DIR" check`.
 
+## Developer setup and worktrees
+
+Setup and worktree management are two layers: a setup step prepares one checkout to install, build,
+and test; a worktree step creates an _additional_ checkout and then runs that same setup inside it.
+Keep both as named scripts so every repo drives the same way. The reasoning behind this section —
+the OSS/pnpm survey, the tool comparison, and the nested-worktree failure analysis — is archived in
+[`references/worktree-devx-report-2026-06-30.md`](references/worktree-devx-report-2026-06-30.md).
+
+### `pnpm dev:setup`
+
+The canonical command to prepare a checkout for local development. A repo exposes it once setup is
+more than `pnpm install`; the baseline does:
+
+- validate the Node version against `engines.node` and enable Corepack;
+- install with the pinned pnpm and a frozen lockfile;
+- preserve ignored local secrets — never overwrite an existing env file;
+- print the effective package manager, the pnpm store path, and the next command (`pnpm check`);
+- stay idempotent and non-destructive.
+
+Repos layer their own steps on top (env/seed copies, cache links, browser installs) but keep the
+contract: one entrypoint, pinned toolchain, minimal bootstrapping, no destructive cleanup. A
+docs-only repo where `pnpm install` is the whole story does not need `dev:setup` — reach for it the
+moment setup grows a second step. The reference implementation ships in
+[`repo-template`](https://github.com/agentic-workflow-kit/repo-template).
+
+### `pnpm worktree:new <branch>`
+
+The canonical command to create a worktree and run `pnpm dev:setup` inside it. The durable
+invariant it enforces:
+
+**No active worktree lives inside another checkout — worktrees are external siblings, never nested
+under the repo root.** A nested `.worktrees/` is a footgun: broad globs (`prettier "**/*..."`,
+`biome .`), file watchers, affected-package calculators, and agent context loaders all walk into it
+and double-process or cross-contaminate sibling work, and duplicate nested `AGENTS.md` files
+mislead agents. Git can ignore the directory; the tools and agents that do not honor that ignore
+are the problem. So even a light, prettier-only repo benefits from the invariant.
+
+The recommended local layout is a **bare hub plus sibling worktrees**: a bare clone holds the shared
+Git object database, and each checkout (`main/`, `<branch>/`, `pr-<n>/`) is a sibling, so no
+checkout is a descendant of another. `worktree:new` resolves the sibling root from
+`$CODE_WORKTREE_ROOT` (or the bare hub's parent) and never commits a machine-specific path; see the
+archived report for the `git clone --bare` walkthrough.
+
+### pnpm store policy
+
+Our repos are single-package with light dependencies, so pnpm's fast-worktree store optimizations
+are not needed yet. Use the default global store; it is shared across a developer's worktrees within
+one trust boundary. Two rules carry forward: a shared writable store assumes mutual trust — do not
+share one store across untrusted agents or users; and revisit `enableGlobalVirtualStore` only if a
+repo grows heavy dependencies and runs many parallel worktrees. Until then, a frozen `pnpm install`
+per worktree (driven by `dev:setup`) is enough.
+
 ## Contributor contract (AGENTS.md)
 
 Every active repo carries its own `AGENTS.md` at the root: the lean, always-loaded contract for
