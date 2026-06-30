@@ -1,15 +1,15 @@
 # agentic-workflow-kit
 
 > A polyrepo family for an agentic software-development lifecycle: product intent -> technical
-> design -> delivery -> learning.
+> design -> planning -> delivery -> learning.
 
 `agentic-workflow-kit` is the public umbrella for standalone, composable repositories. Each repo is
 independently useful, but together they form a lifecycle for turning software intent into designed,
 implemented, reviewed, and improved systems.
 
-This organization carries the full lifecycle as standalone products — from product definition through
-technical design to delivery. **Jig**, the delivery/execution engine, is the suite's main product and
-lives here.
+This organization carries the full lifecycle as standalone products, from product definition through
+technical design, planning, delivery, and learning. **Jig**, the delivery/execution engine, is the
+suite's main runtime product and lives here.
 
 ## Why Polyrepo
 
@@ -22,20 +22,19 @@ repo can stay focused without inventing its own vocabulary.
 
 ## Repositories
 
-| Repo                                                                           | Role                                                                                                                                                              | Status                                         |
-| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs.                                                                             | Ready locally; GitHub shell prepared           |
-| [`jig`](https://github.com/agentic-workflow-kit/jig)                           | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; product layer drafted, design/impl next |
-| Product layer                                                                  | Define-product and PRD authoring upstream of design.                                                                                                              | Planned                                        |
-| Planning layer                                                                 | Decompose design into the execution plan Jig runs.                                                                                                                | Planned                                        |
-| Learning loop                                                                  | Capture run outcomes and feed them back into future work.                                                                                                         | Planned                                        |
+| Repo                                                                           | Role                                                                                                                                                              | Status                                    |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| [`define-product`](https://github.com/agentic-workflow-kit/define-product)     | Product layer: PRD authoring and stable, ID'd acceptance criteria upstream of design.                                                                             | Seeded; M3 contract bootstrap             |
+| [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs.                                                                             | Built; planning handoff contract pinned   |
+| [`jig`](https://github.com/agentic-workflow-kit/jig)                           | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; product and contract design seeded |
+| Planning layer                                                                 | Decompose design into the execution plan Jig runs.                                                                                                                | Planned                                   |
+| Learning loop                                                                  | Capture run outcomes and feed them back into future work.                                                                                                         | Planned                                   |
 
 ## Lifecycle
 
 ```text
-PRODUCT ---------> DESIGN ----------> DELIVERY --------> LEARNING
-define / PRD       technical-design   plan -> jig (run)  feedback loop
-                   repo               this org           back into layers
+PRODUCT ---------> DESIGN ----------> PLANNING --------> DELIVERY --------> LEARNING
+define / PRD       technical-design   design -> plan     jig (run)          feedback loop
 ```
 
 The repos are meant to compose without becoming tightly coupled. Each should have a crisp purpose,
@@ -55,10 +54,11 @@ The shared vocabulary is intentionally small:
 
 ## Current Focus
 
-The first design-stage layer is `technical-design`: a set of AI skills for right-sized architecture,
-reviewable decisions, and enforceable boundaries. `jig`, the suite's execution engine, now has its
-product layer drafted; its engineering design and implementation are being built next.
+The current org focus is M4: seeding the Planning layer so approved technical designs can become
+Jig-ready execution plans without re-deciding product or design scope. M3 seeded `define-product`
+with the PRD and acceptance-criteria contract that Technical Design and Planning cite.
 
-Start with [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) for the
-design-stage skills, or follow [`jig`](https://github.com/agentic-workflow-kit/jig) — the execution
-engine — as it takes shape.
+Start with [`define-product`](https://github.com/agentic-workflow-kit/define-product) for product
+intent and acceptance-criteria IDs, [`technical-design`](https://github.com/agentic-workflow-kit/technical-design)
+for design-stage skills, or [`jig`](https://github.com/agentic-workflow-kit/jig) for the execution
+engine.

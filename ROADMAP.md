@@ -20,12 +20,13 @@ uses to derive its local plan.
 ```text
 PRODUCT ---------> DESIGN ----------> PLANNING --------> DELIVERY --------> LEARNING
 define / PRD       technical-design   design -> plan     jig (run)          feedback loop
-[planned]          [built]            [planned]          [early]            [planned]
+[seeded]           [built]            [planned]          [early]            [planned]
 ```
 
-Each stage produces a **durable, structured artifact** that is the next stage's input. Two
-stages already exist as repos (`technical-design`, `jig`); three are planned (Product,
-Planning, Learning). `.github` is org infrastructure, not a lifecycle stage.
+Each stage produces a **durable, structured artifact** that is the next stage's input. Three
+stages already exist as repos (`define-product`, `technical-design`, `jig`); two are planned
+(Planning, Learning). `.github` is org infrastructure, not a lifecycle stage. Of the existing
+repos, `define-product` is seeded, `technical-design` is built, and `jig` is early.
 
 > The org `profile/README.md` shows a **four-stage** suite spine that folds Planning under the
 > delivery handoff (`plan -> jig (run)`). This roadmap breaks Planning out as its **own layer**
@@ -39,14 +40,14 @@ Planning, Learning). `.github` is org infrastructure, not a lifecycle stage.
 The layers do **not** form a build chain where each must wait for the previous. They are
 coupled only by a small set of **shared contracts (seams)**. Pin down each seam's shape early
 and every layer can be designed in parallel against the contract, not against another layer's
-internals. Most seams are owned by the two layers that already exist.
+internals. The currently pinned seams are owned by existing layer repos.
 
-| Seam (shared artifact)                                    | Owner              | Consumers                      | Status                                                           |
-| --------------------------------------------------------- | ------------------ | ------------------------------ | ---------------------------------------------------------------- |
-| **Execution-plan schema** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/execution-plan-contract-v0.md`        |
-| **Observability / event records** — durable run output    | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/observability-records-contract-v0.md` |
-| **Technical-design document format**                      | `technical-design` | Planning layer consumes        | Exists (`technical-design/docs/design/`)                         |
-| **PRD / ID'd acceptance-criteria format**                 | Product layer      | Design + Planning cite the IDs | Planned (v0.7 `define-product` is prior art)                     |
+| Seam (shared artifact)                                    | Owner              | Consumers                      | Status                                                                          |
+| --------------------------------------------------------- | ------------------ | ------------------------------ | ------------------------------------------------------------------------------- |
+| **Execution-plan schema** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/execution-plan-contract-v0.md`                       |
+| **Observability / event records** — durable run output    | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/observability-records-contract-v0.md`                |
+| **Technical-design document format**                      | `technical-design` | Planning layer consumes        | v0 handoff: `technical-design/docs/design/technical-design-handoff-contract.md` |
+| **PRD / ID'd acceptance-criteria format**                 | `define-product`   | Design + Planning cite the IDs | v0 contract: `define-product/docs/product/prd-contract.md`                      |
 
 **Sequencing rule of thumb:** the highest-leverage early work is authoring Jig's two seams
 (execution-plan schema, observability records), because two downstream layers wait on their
@@ -107,27 +108,31 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
   - Legacy gate/CI mechanics (reference only): `docs/engineering/`.
   - Legacy implementation sequencing (reference only): `docs/implementation/` (epic/domain DAGs).
 
-### Product layer — define-product / PRD `[planned]`
+### define-product — Product layer `[seeded]`
 
 - **Role:** help an owner produce a PRD with ID'd acceptance criteria the downstream layers
   reference.
 - **Owns the seam:** the PRD / acceptance-criteria-ID format.
 - **Depends on:** nothing upstream. Sits at the head of the lifecycle.
-- **Next step (when picked up):** define product -> design its own skills/artifacts ->
-  implement. Can start **now**, in parallel; its only outward contract is the
-  acceptance-criteria-ID format that Design and Planning cite.
-- **References:** legacy `docs/product/supporting-products/define-product.md`; v0.7 skill
+- **Next step:** keep future Product-layer design and implementation derived from its own product
+  docs. Its outward contract is the acceptance-criteria-ID format that Design and Planning cite.
+- **References:** its own
+  [`docs/product/prd-contract.md`](https://github.com/agentic-workflow-kit/define-product/blob/main/docs/product/prd-contract.md)
+  and
+  [`docs/product/examples/minimal-prd.md`](https://github.com/agentic-workflow-kit/define-product/blob/main/docs/product/examples/minimal-prd.md);
+  legacy `docs/product/supporting-products/define-product.md`; v0.7 skill
   `agentic-workflow-kit:define-product`.
 
 ### Planning layer — design -> plan `[planned]`
 
 - **Role:** decompose a technical design into a Jig-ready execution plan in the expected schema.
 - **Owns the seam:** none new — it **produces to** Jig's execution-plan schema and **consumes**
-  the technical-design document format.
-- **Depends on (contract, not internals):** Jig's execution-plan schema; technical-design's
-  document format. Both owners already exist — define those two seam shapes and Planning can be
-  designed in parallel.
-- **Next step (when picked up):** define product -> design -> implement, against the two seam
+  the Product PRD / acceptance-criteria-ID contract plus the technical-design document format.
+- **Depends on (contract, not internals):** `define-product`'s PRD / acceptance-criteria-ID
+  contract, Jig's execution-plan schema, and technical-design's document format. Those owners
+  already exist; once the three seam shapes are pinned, Planning can be designed against contracts
+  rather than upstream internals.
+- **Next step (when picked up):** define product -> design -> implement, against the three seam
   contracts above.
 - **References:** legacy `docs/product/supporting-products/design-to-plan.md`; legacy
   `docs/implementation-authoring/delivery-pipeline/` and `docs/implementation-authoring/authoring-standard/`;
@@ -153,13 +158,15 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
 1. **`jig` design** — author `docs/design/`, leading with the two seams (execution-plan schema,
    observability records). Highest leverage: unblocks Planning and Learning by shape.
 2. **`technical-design` hardening** — fully independent.
-3. **Product layer** — fully independent; can be picked up and designed today.
-4. **Planning layer** — designable in parallel once Jig's execution-plan schema and
-   technical-design's document format are pinned (both owners exist).
+3. **`define-product`** — product contract is seeded; future design and implementation can derive
+   from its own product docs without blocking M4.
+4. **Planning layer** — designable once the Product PRD / acceptance-criteria-ID contract, Jig's
+   execution-plan schema, and technical-design's document format are pinned (all owners exist).
 5. **Learning loop** — designable in parallel once Jig's records seam is pinned.
 
-The only true ordering constraint is _contract-shape_, not _implementation_: Planning and
-Learning need the **shape** of Jig's seams, not finished Jig code.
+The only true ordering constraint is _contract-shape_, not _implementation_: Planning needs the
+**shape** of Product, Technical Design, and Jig input/output seams, and Learning needs the
+**shape** of Jig's records seam, not finished upstream implementations.
 
 Repo-level plans should derive from the active milestone rather than expanding this roadmap into
 a centralized backlog. The repo owner records its local plan in that repo, including what it owns,
