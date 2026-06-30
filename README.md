@@ -8,5 +8,7 @@ This repository owns the public organization profile and default community healt
   [`SECURITY.md`](SECURITY.md) provide defaults for repositories that do not define their own.
 - [Issue templates](.github/ISSUE_TEMPLATE) and the
   [pull request template](.github/PULL_REQUEST_TEMPLATE.md) provide the default contribution flow.
+- [`REPO-STRUCTURE.md`](REPO-STRUCTURE.md) defines the default repository layout (README + `docs/product`
+  + `docs/design` + source tier) for org repositories.
 
 Repository-specific files override these defaults when a project needs its own policy.
