@@ -112,6 +112,12 @@ this is applied reproducibly by `scripts/apply-repo-standard.sh <owner>/<repo>` 
 [`repo-template`](https://github.com/agentic-workflow-kit/repo-template) repo (idempotent — updates
 the existing `main` ruleset if present, else creates it).
 
+This is applied **per repo by design.** A single org-level ruleset covering every repo at once
+would automate branch protection for new repos, but org-level rulesets are a GitHub **Team**
+feature and this org runs on the **Free** plan, so the per-repo script is the mechanism. The one
+exception is the default workflow permission: it is already set org-wide to read-only, so new repos
+inherit that without the script.
+
 Stricter supply-chain policy, such as SHA-pinned Actions or selected-actions allowlists, is a future
 hardening step and is not part of the default moderate baseline.
 
