@@ -114,9 +114,8 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
   reference.
 - **Owns the seam:** the PRD / acceptance-criteria-ID format.
 - **Depends on:** nothing upstream. Sits at the head of the lifecycle.
-- **Next step:** land the M3 product contract, then keep future Product-layer design and
-  implementation derived from its own product docs. Its outward contract is the
-  acceptance-criteria-ID format that Design and Planning cite.
+- **Next step:** keep future Product-layer design and implementation derived from its own product
+  docs. Its outward contract is the acceptance-criteria-ID format that Design and Planning cite.
 - **References:** its own
   [`docs/product/prd-contract.md`](https://github.com/agentic-workflow-kit/define-product/blob/main/docs/product/prd-contract.md)
   and
@@ -159,7 +158,8 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
 1. **`jig` design** — author `docs/design/`, leading with the two seams (execution-plan schema,
    observability records). Highest leverage: unblocks Planning and Learning by shape.
 2. **`technical-design` hardening** — fully independent.
-3. **`define-product`** — M3 product contract bootstrap is current and independent.
+3. **`define-product`** — product contract is seeded; future design and implementation can derive
+   from its own product docs without blocking M4.
 4. **Planning layer** — designable once the Product PRD / acceptance-criteria-ID contract, Jig's
    execution-plan schema, and technical-design's document format are pinned (all owners exist).
 5. **Learning loop** — designable in parallel once Jig's records seam is pinned.

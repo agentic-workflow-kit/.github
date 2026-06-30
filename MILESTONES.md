@@ -219,7 +219,7 @@ before any design or implementation:
 
 ### M3: PRD and Acceptance-Criteria Contract
 
-- State: current
+- State: done
 - Outcome: Enable Product, Design, and Planning layers to cite stable product intent through
   ID'd acceptance criteria instead of relying on unstructured product prose.
 - Why now: Planning and technical design both need durable "what and why" references before
@@ -253,13 +253,13 @@ before any design or implementation:
   - Fails if the Product layer duplicates `technical-design` or Planning responsibilities.
   - Fails if ID stability is not specified.
 - Evidence when landed:
-  - `define-product` PR merged with the PRD contract docs and `pnpm check` green.
-  - `.github` PR merged with `ROADMAP.md`, `MILESTONES.md`, and profile links updated to the
+  - `define-product` PR #1 merged with the PRD contract docs and `pnpm check` green.
+  - `.github` PR #11 merged with `ROADMAP.md`, `MILESTONES.md`, and profile links updated to the
     exact Product-layer contract.
 
 ### M4: Planning Layer Seed
 
-- State: proposed
+- State: current
 - Outcome: Enable an approved technical design to become a Jig-ready execution plan without
   re-deciding product or design scope.
 - Why now: Once Jig's plan shape is drafted and the design handoff is pinned, Planning can be designed

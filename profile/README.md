@@ -54,9 +54,9 @@ The shared vocabulary is intentionally small:
 
 ## Current Focus
 
-The current org focus is M3: bootstrapping `define-product` with the PRD and acceptance-criteria
-contract that Technical Design and Planning cite. This is Product-layer work, not Planning or
-design-to-plan mechanics.
+The current org focus is M4: seeding the Planning layer so approved technical designs can become
+Jig-ready execution plans without re-deciding product or design scope. M3 seeded `define-product`
+with the PRD and acceptance-criteria contract that Technical Design and Planning cite.
 
 Start with [`define-product`](https://github.com/agentic-workflow-kit/define-product) for product
 intent and acceptance-criteria IDs, [`technical-design`](https://github.com/agentic-workflow-kit/technical-design)
