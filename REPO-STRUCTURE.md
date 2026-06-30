@@ -56,7 +56,10 @@ Active repositories carry a root `package.json` even when they do not publish a 
 The package is the local tooling contract:
 
 - `private: true` until the repository intentionally publishes an artifact.
-- `packageManager: "pnpm@11.5.1"` and `engines.node: ">=24"`.
+- `packageManager: "pnpm@11.5.1"` and `engines.node: ">=22"`.
+- A root `.nvmrc` pins the **local** dev version (currently `26`, the current release line).
+  `engines.node` is the **compatibility floor**; CI runs that floor (Node 22, see below) so the
+  supported range is actually verified, while contributors get the current line locally.
 - `pnpm check` is the single required local and CI gate.
 - Docs-only repositories may make `pnpm check` a lightweight formatting/lint validation.
 - Skills packs and engines wrap their repo-specific validation under `pnpm check` instead of exposing
@@ -64,8 +67,32 @@ The package is the local tooling contract:
 
 The default CI workflow is `.github/workflows/check.yml` with a job named exactly `check`, running on
 pull requests and pushes to `main`. It uses `actions/checkout@v7`, `pnpm/action-setup@v6`,
-`actions/setup-node@v6`, `actions/cache@v6`, Node 24, pnpm 11.5.1, a repo-local `.pnpm-store`, and
-`pnpm --config.store-dir="$PNPM_STORE_DIR" check`.
+`actions/setup-node@v6` pinned to the `engines.node` floor (`node-version: 22`) so the `>=22`
+support claim is verified — pin it explicitly, since a range like `>=22` resolves to the latest
+satisfying version, not the floor — `actions/cache@v6`, pnpm 11.5.1, a repo-local `.pnpm-store`,
+and `pnpm --config.store-dir="$PNPM_STORE_DIR" check`.
+
+## Contributor contract (AGENTS.md)
+
+Every active repo carries its own `AGENTS.md` at the root: the lean, always-loaded contract for
+humans and agents working in that repo. It is **self-contained** — an agent with only this one
+repo checked out (including Claude or Codex cloud runs) must be able to act on it without reading
+any other repo or assuming the local multi-repo layout. Keep it to what matters every session:
+where ground truth lives in this repo's `docs/`, the few real invariants, the `pnpm check` gate,
+and the conventions that prevent drift; let `docs/` hold the detail. Restate the small shared
+baseline inline rather than pointing at this `.github` repo for rules a contributor needs. The
+org-level / container `AGENTS.md` is **local orientation only** (the multi-repo picture), never a
+runtime dependency of a repo.
+
+`AGENTS.md` is the single source of truth and Codex reads it natively. Claude Code auto-loads
+`CLAUDE.md`, not `AGENTS.md`, so every repo also carries a one-line `CLAUDE.md` that imports it:
+
+```text
+@AGENTS.md
+```
+
+No content is duplicated — the `CLAUDE.md` is a loader shim so Claude (local and cloud) reads the
+same contract. Add Claude-specific notes below the import only if a repo genuinely needs them.
 
 ## Repository settings standard
 
