@@ -93,7 +93,7 @@ allowBuilds: {} # no dependency runs install/build scripts until reviewed and li
 minimumReleaseAge: 1440 # skip versions published < 1 day ago (raise to 10080 for a 1-week window)
 minimumReleaseAgeExclude: [] # exempt a package when you must pull a fresh release immediately
 engineStrict: true # make engines.node a hard gate, not a warning
-nodeVersion: "22.13.0" # evaluate dependency engines against the supported floor
+nodeVersion: "22.13.0" # evaluate dependency engines against the supported floor (pnpm 11.9 needs >=22.13)
 pmOnFail: error # fail if the running pnpm differs from the packageManager pin (vs silent download)
 ```
 
