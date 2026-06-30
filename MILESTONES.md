@@ -138,7 +138,7 @@ before any design or implementation:
 - Why now: These are the highest-leverage seams in the org. Planning produces execution
   plans, and Learning consumes run records.
 - Primary owner: `jig`
-- Participating repos: `jig`, `technical-design`, future Planning layer, future Learning
+- Participating repos: `jig`, `technical-design`, `design-to-plan`, future Learning
   loop, `.github`
 - Owned seam or artifact:
   - Execution-plan shape — high-level props (v0)
@@ -187,7 +187,7 @@ before any design or implementation:
 - Why now: Planning needs a stable design input shape as much as it needs Jig's output plan
   shape.
 - Primary owner: `technical-design`
-- Participating repos: `technical-design`, future Planning layer, `.github`
+- Participating repos: `technical-design`, `design-to-plan`, `.github`
 - Owned seam or artifact: Technical-design document format
 - Entry criteria:
   - The current `technical-design` skills, methodology profile, and evals are green.
@@ -206,7 +206,7 @@ before any design or implementation:
   - Any needed skill/template updates
 - Repo planning handoff:
   - `technical-design` derives a local docs/skills plan.
-  - Future Planning work consumes the contract, not the internal DDD profile mechanics.
+  - `design-to-plan` consumes the contract, not the internal DDD profile mechanics.
 - Risks / kill assumptions:
   - Fails if the handoff is too DDD-specific for future methodology profiles.
   - Fails if required planning facts are implied by prose instead of named fields or
@@ -225,8 +225,7 @@ before any design or implementation:
 - Why now: Planning and technical design both need durable "what and why" references before
   work decomposes into implementation plans.
 - Primary owner: `define-product`
-- Participating repos: `define-product`, `technical-design`, future Planning layer,
-  `.github`
+- Participating repos: `define-product`, `technical-design`, `design-to-plan`, `.github`
 - Owned seam or artifact: PRD / acceptance-criteria-ID format
 - Entry criteria:
   - M0 is adopted.
@@ -259,13 +258,13 @@ before any design or implementation:
 
 ### M4: Planning Layer Seed
 
-- State: current
+- State: done
 - Outcome: Enable an approved technical design to become a Jig-ready execution plan without
   re-deciding product or design scope.
 - Why now: Once Jig's plan shape is drafted and the design handoff is pinned, Planning can be designed
   against contracts rather than against another repo's internals.
-- Primary owner: future Planning layer
-- Participating repos: future Planning layer, `jig`, `technical-design`, `define-product`,
+- Primary owner: `design-to-plan`
+- Participating repos: `design-to-plan`, `jig`, `technical-design`, `define-product`,
   `.github`
 - Owned seam or artifact: None new. Planning consumes Product and Technical Design contracts
   and produces Jig execution plans.
@@ -277,7 +276,7 @@ before any design or implementation:
 - Exit criteria:
   - Planning product docs define its role, non-goals, and supported input/output contracts.
   - Planning design docs describe how designs become execution plans.
-  - The output fixture validates against Jig's execution-plan schema.
+  - The output fixture is checked against Jig's v0 execution-plan contract shape.
   - The layer refuses to invent product scope or implementation package structure not present
     in its inputs.
 - Artifacts:
@@ -285,7 +284,7 @@ before any design or implementation:
   - Planning-layer design docs
   - Design-to-plan example fixture
 - Repo planning handoff:
-  - The Planning layer derives its own repo plan from M4.
+  - The `design-to-plan` layer derives its own repo plan from M4.
   - `jig` owns only plan validation feedback, not Planning's decomposition method.
   - `technical-design` owns only design input contract feedback, not execution sequencing.
 - Risks / kill assumptions:
@@ -293,24 +292,26 @@ before any design or implementation:
   - Fails if plan output proves shape but not dependency closure.
   - Fails if producer/consumer relationships are implicit.
 - Evidence when landed:
-  - Planning-layer PR or repo creation merged with checks green.
-  - A sample plan is traceable from PRD IDs through technical-design IDs to Jig plan fields.
+  - `design-to-plan` PR #1 merged with the docs-only Planning-layer seed and `check` green.
+  - `.github` PR #12 merged with roadmap, milestone, and profile updates and `check` green.
+  - The sample plan fixture is traceable from PRD IDs through technical-design IDs to Jig v0 plan
+    properties.
 
 ### M5: Jig Local MVP Slice
 
-- State: proposed
+- State: current
 - Outcome: Enable an operator to run one minimal valid execution plan under policy and
   receive durable, inspectable run records.
 - Why now: After the contracts exist, a narrow vertical slice can prove the execution model
   without locking the whole product surface too early.
 - Primary owner: `jig`
-- Participating repos: `jig`, future Planning layer, `.github`
+- Participating repos: `jig`, `design-to-plan`, `.github`
 - Owned seam or artifact:
   - Local runner behavior behind the execution-plan and run-record contracts
   - Policy and approval behavior for the first supported local mode
 - Entry criteria:
   - M1 is done.
-  - M4 has produced or committed to a valid sample execution plan shape.
+  - M4 has produced a sample execution plan shape fixture.
   - Jig design has named the first local execution host and the minimum policy posture.
 - Exit criteria:
   - Jig can validate and preview one minimal execution plan.
@@ -326,8 +327,8 @@ before any design or implementation:
   - Tests and verification docs
 - Repo planning handoff:
   - `jig` derives implementation stories from its design docs.
-  - Planning provides only the sample plan fixture shape unless M4 is ready for broader
-    integration.
+  - `design-to-plan` provides only the sample plan fixture shape until broader integration is
+    planned.
 - Risks / kill assumptions:
   - Fails if the MVP bypasses the runner/worker authority boundary for convenience.
   - Fails if records are useful only for debugging and not for Learning consumers.
@@ -345,7 +346,7 @@ before any design or implementation:
   soon as Jig's record contract and sample records exist.
 - Primary owner: future Learning loop
 - Participating repos: future Learning loop, `jig`, `technical-design`, `define-product`,
-  future Planning layer, `.github`
+  `design-to-plan`, `.github`
 - Owned seam or artifact: None new. Learning consumes Jig observability / event records.
 - Entry criteria:
   - M1 event-record shape v0 is drafted and agreed.

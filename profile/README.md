@@ -27,14 +27,14 @@ repo can stay focused without inventing its own vocabulary.
 | [`define-product`](https://github.com/agentic-workflow-kit/define-product)     | Product layer: PRD authoring and stable, ID'd acceptance criteria upstream of design.                                                                             | Seeded; M3 contract bootstrap             |
 | [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs.                                                                             | Built; planning handoff contract pinned   |
 | [`jig`](https://github.com/agentic-workflow-kit/jig)                           | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; product and contract design seeded |
-| Planning layer                                                                 | Decompose design into the execution plan Jig runs.                                                                                                                | Planned                                   |
+| [`design-to-plan`](https://github.com/agentic-workflow-kit/design-to-plan)     | Planning layer: decompose approved designs into the execution-plan shape Jig runs.                                                                                | Seeded; M4 contract bootstrap             |
 | Learning loop                                                                  | Capture run outcomes and feed them back into future work.                                                                                                         | Planned                                   |
 
 ## Lifecycle
 
 ```text
 PRODUCT ---------> DESIGN ----------> PLANNING --------> DELIVERY --------> LEARNING
-define / PRD       technical-design   design -> plan     jig (run)          feedback loop
+define / PRD       technical-design   design-to-plan     jig (run)          feedback loop
 ```
 
 The repos are meant to compose without becoming tightly coupled. Each should have a crisp purpose,
@@ -54,11 +54,12 @@ The shared vocabulary is intentionally small:
 
 ## Current Focus
 
-The current org focus is M4: seeding the Planning layer so approved technical designs can become
-Jig-ready execution plans without re-deciding product or design scope. M3 seeded `define-product`
-with the PRD and acceptance-criteria contract that Technical Design and Planning cite.
+The current org focus is M5: proving a narrow Jig local MVP slice now that Product, Technical
+Design, and Planning contract shapes are seeded. M4 seeded `design-to-plan` so approved technical
+designs can become Jig-ready execution plans without re-deciding product or design scope.
 
 Start with [`define-product`](https://github.com/agentic-workflow-kit/define-product) for product
 intent and acceptance-criteria IDs, [`technical-design`](https://github.com/agentic-workflow-kit/technical-design)
-for design-stage skills, or [`jig`](https://github.com/agentic-workflow-kit/jig) for the execution
+for design-stage skills, [`design-to-plan`](https://github.com/agentic-workflow-kit/design-to-plan)
+for Planning-layer docs, or [`jig`](https://github.com/agentic-workflow-kit/jig) for the execution
 engine.
