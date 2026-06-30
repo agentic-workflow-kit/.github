@@ -293,7 +293,7 @@ before any design or implementation:
   - Fails if producer/consumer relationships are implicit.
 - Evidence when landed:
   - `design-to-plan` PR #1 opened with the docs-only Planning-layer seed and `check` green.
-  - `.github` PR #TBD wires the roadmap, milestones, and profile updates with `check` green.
+  - `.github` PR #12 wires the roadmap, milestones, and profile updates with `check` green.
   - The sample plan fixture is traceable from PRD IDs through technical-design IDs to Jig v0 plan
     properties.
 
