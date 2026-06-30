@@ -31,3 +31,13 @@ scope reductions, stronger verification, or clearer docs before merging.
 
 Each repository owns its own setup and verification commands. Read that repository's README and local
 contribution notes before making code changes.
+
+For active repositories in this organization, the default local contract is:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm check
+```
+
+Repositories pin pnpm through `packageManager` and require Node 24 or newer. The matching CI workflow
+must expose a job named `check`; repository branch protection uses that exact status name.
