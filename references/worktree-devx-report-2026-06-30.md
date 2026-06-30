@@ -12,6 +12,14 @@ Date: 2026-06-30
 > decisions (the OSS/pnpm survey, the `git-wt` vs `git-worktree-runner` comparison, and the
 > nested-worktree failure analysis). The external repos are referenced as evidence only; this org
 > does not own or migrate them.
+>
+> **One recommendation in this report was explicitly _not_ adopted:** the body proposes carrying
+> worktree/base/verify policy in a `.workflow/config.yaml` ("Standard policy sources", "Portable
+> workflow config shape", "Final Recommendation" item 5). That is **legacy-kit config and is out of
+> scope here.** The org's worktree policy is the invariant plus the `dev:setup` / `worktree:new`
+> commands in `REPO-STRUCTURE.md`, which resolve topology from `CODE_WORKTREE_ROOT` (or the checkout
+> layout) — there is no `.workflow/config.yaml` dependency. Read those sections as historical
+> reasoning, not as org policy.
 
 ## Task
 
