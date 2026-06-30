@@ -24,5 +24,6 @@ these standards into something another repo must fetch at runtime.
   `prettier --check` over Markdown/YAML/JSON. Keep standards lean and non-duplicative.
 - **`main`-based:** branch from `main`, PR into it, green `check` required, review conversations
   resolved, squash-merge. Conventional commit subjects; no attribution footers; no emojis
-  anywhere. Worktrees for non-trivial work are external siblings of this checkout — never nested
-  inside it.
+  anywhere. Worktrees for non-trivial work are external siblings of this checkout under
+  `worktrees/.github/<branch>` — never nested inside it. Use `pnpm worktree:new <branch>` to create
+  one and `pnpm worktree:clean <branch>` after merge.

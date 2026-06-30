@@ -500,12 +500,12 @@ Running `biome .`, `prettier --check .`, `pnpm check`, `nx affected`, `turbo`, o
 Use this as the practical target shape:
 
 ```text
-/Users/aryekogan/code/<repo-name>/
-  .bare/
-  main/          # or v-next for workflow-kit primary work
-  wt/
-    <branch>/
-    pr-<number>/
+/Users/aryekogan/code/<family-root>/
+  <repo-name>/   # primary checkout, or v-next for workflow-kit primary work
+  worktrees/
+    <repo-name>/
+      <branch>/
+      pr-<number>/
 ```
 
 The exact parent directory can change, but the invariant should not:
@@ -671,7 +671,8 @@ The worktree script should:
 - refuse to create a new worktree inside an active checkout unless explicitly allowed for legacy compatibility
 - prefer an external sibling layout, ideally under the repo-family root managed by the bare hub
 - refuse to run when the main checkout has unsafe local state unless explicitly allowed
-- create the worktree under the resolved sibling branch directory, such as `<repo-family>/wt/<branch>`
+- create the worktree under the resolved sibling branch directory, such as
+  `<repo-family>/worktrees/<repo>/<branch>`
 - run `pnpm dev:setup` in the new worktree
 - print:
   - repo
@@ -754,10 +755,9 @@ A future standard doc, likely under shared agent/dev guidance, should define:
 Before changing any repo, decide the portable path convention. A candidate shape is:
 
 ```text
-/Users/aryekogan/code/<repo-name>/
-  .bare/
-  main/ or v-next/
-  wt/<branch-or-pr>/
+/Users/aryekogan/code/<family-root>/
+  <repo-name>/           # primary checkout, or v-next for workflow-kit
+  worktrees/<repo>/<branch-or-pr>/
 ```
 
 Use the local repos only as reference checks:
@@ -830,12 +830,14 @@ The recommended durable shape is:
 
 1. `pnpm dev:setup` is the canonical checkout setup command.
 2. `pnpm worktree:new <branch-or-pr>` is the canonical worktree creation command.
-3. Nested `.worktrees/` is legacy only; new worktrees should be external siblings, preferably through a bare Git hub.
-4. Existing `scripts/setup-worktree.sh` scripts become compatibility wrappers.
-5. `.workflow/config.yaml` owns machine-readable worktree/base/verify policy.
-6. `AGENTS.md` owns human and agent behavior.
-7. `git-worktree-runner` remains optional local ergonomics.
-8. `git-wt` is the strongest OSS/pnpm reference for the desired command UX and topology, but remains optional until wrapped by repo policy.
+3. `pnpm worktree:clean <branch>` is the canonical post-merge worktree cleanup command.
+4. New worktrees use grouped external sibling paths: `worktrees/<repo>/<branch>`.
+5. Nested `.worktrees/` is legacy only; new worktrees should be external siblings, preferably through a bare Git hub.
+6. Existing `scripts/setup-worktree.sh` scripts become compatibility wrappers.
+7. `.workflow/config.yaml` owns machine-readable worktree/base/verify policy.
+8. `AGENTS.md` owns human and agent behavior.
+9. `git-worktree-runner` remains optional local ergonomics.
+10. `git-wt` is the strongest OSS/pnpm reference for the desired command UX and topology, but remains optional until wrapped by repo policy.
 
 This matches OSS practice: pin the toolchain, document setup, keep project-specific setup in repo scripts, and add worktree helpers only above that foundation.
 

@@ -152,9 +152,9 @@ Two mechanisms are **named now so first adoption is turnkey**, with detail in
 ## Developer setup and worktrees
 
 Setup and worktree management are two layers: a setup step prepares one checkout to install, build,
-and test; a worktree step creates an _additional_ checkout and then runs that same setup inside it.
-Keep both as named scripts so every repo drives the same way. The reasoning behind this section —
-the OSS/pnpm survey, the tool comparison, and the nested-worktree failure analysis — is archived in
+and test; worktree steps create or remove _additional_ checkouts while preserving that setup
+contract. Keep them as named scripts so every repo drives the same way. The reasoning behind this
+section — the OSS/pnpm survey, the tool comparison, and the nested-worktree failure analysis — is archived in
 [`references/worktree-devx-report-2026-06-30.md`](references/worktree-devx-report-2026-06-30.md).
 
 ### `pnpm dev:setup`
@@ -187,10 +187,41 @@ mislead agents. Git can ignore the directory; the tools and agents that do not h
 are the problem. So even a light, prettier-only repo benefits from the invariant.
 
 The recommended local layout is a **bare hub plus sibling worktrees**: a bare clone holds the shared
-Git object database, and each checkout (`main/`, `<branch>/`, `pr-<n>/`) is a sibling, so no
-checkout is a descendant of another. `worktree:new` resolves the sibling root from
-`$CODE_WORKTREE_ROOT` (or the bare hub's parent) and never commits a machine-specific path; see the
-archived report for the `git clone --bare` walkthrough.
+Git object database, and each checkout is outside every other checkout, so no checkout is a
+descendant of another. `worktree:new` resolves the family root from `$CODE_WORKTREE_ROOT` when set,
+or from the primary checkout's parent otherwise, and creates grouped paths at
+`<root>/worktrees/<repo-name>/<branch>` with branch slashes converted to dashes. In the local
+multi-repo container, that means paths such as
+`agentic-workflow-kit/worktrees/jig/docs-my-change`. The script never commits a machine-specific
+path; see the archived report for the `git clone --bare` walkthrough.
+
+`worktree:new` creates a non-tracking local topic branch from the base ref. That avoids accidental
+pushes to `origin/main` when the base is `origin/main`; publish the topic branch explicitly when
+opening a PR.
+
+### `pnpm worktree:clean <branch>`
+
+The canonical command to remove a completed worktree after the branch has merged. It targets the
+same grouped path as `worktree:new`:
+`<root>/worktrees/<repo-name>/<branch>`.
+
+The default cleanup is conservative:
+
+- fetch and prune remote refs first;
+- refuse to remove the current checkout;
+- refuse dirty worktrees;
+- refuse if the target checkout is not on the requested branch;
+- refuse cleanup while `origin/<branch>` still exists, because the org standard auto-deletes merged
+  branches remotely;
+- require merge evidence before deleting the local branch: either the local checkout's `HEAD` is
+  already an ancestor of the remote default branch, or GitHub reports a merged PR whose head commit
+  matches that exact local `HEAD`;
+- remove the worktree, delete the local branch with `git branch -D` for squash-merge compatibility,
+  prune stale worktree metadata, and print the verification command.
+
+`--force` is the explicit escape hatch for already-reviewed exceptional cleanup, such as a local
+scratch branch or a known-safe branch whose remote ref still exists. Do not use it as the normal
+merge closeout path.
 
 ### pnpm store policy
 
