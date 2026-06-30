@@ -22,4 +22,5 @@ these standards into something another repo must fetch at runtime.
   `prettier --check` over Markdown/YAML/JSON. Keep standards lean and non-duplicative.
 - **`main`-based:** branch from `main`, PR into it, green `check` required, review conversations
   resolved, squash-merge. Conventional commit subjects; no attribution footers; no emojis
-  anywhere.
+  anywhere. Worktrees for non-trivial work are external siblings of this checkout — never nested
+  inside it.
