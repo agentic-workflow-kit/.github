@@ -41,12 +41,12 @@ coupled only by a small set of **shared contracts (seams)**. Pin down each seam'
 and every layer can be designed in parallel against the contract, not against another layer's
 internals. Most seams are owned by the two layers that already exist.
 
-| Seam (shared artifact)                                    | Owner              | Consumers                      | Status                                       |
-| --------------------------------------------------------- | ------------------ | ------------------------------ | -------------------------------------------- |
-| **Execution-plan schema** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | To be authored in `jig/docs/design/`         |
-| **Observability / event records** — durable run output    | `jig`              | Learning loop consumes         | To be authored in `jig/docs/design/`         |
-| **Technical-design document format**                      | `technical-design` | Planning layer consumes        | Exists (`technical-design/docs/design/`)     |
-| **PRD / ID'd acceptance-criteria format**                 | Product layer      | Design + Planning cite the IDs | Planned (v0.7 `define-product` is prior art) |
+| Seam (shared artifact)                                    | Owner              | Consumers                      | Status                                                           |
+| --------------------------------------------------------- | ------------------ | ------------------------------ | ---------------------------------------------------------------- |
+| **Execution-plan schema** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/execution-plan-contract-v0.md`        |
+| **Observability / event records** — durable run output    | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/observability-records-contract-v0.md` |
+| **Technical-design document format**                      | `technical-design` | Planning layer consumes        | Exists (`technical-design/docs/design/`)                         |
+| **PRD / ID'd acceptance-criteria format**                 | Product layer      | Design + Planning cite the IDs | Planned (v0.7 `define-product` is prior art)                     |
 
 **Sequencing rule of thumb:** the highest-leverage early work is authoring Jig's two seams
 (execution-plan schema, observability records), because two downstream layers wait on their
