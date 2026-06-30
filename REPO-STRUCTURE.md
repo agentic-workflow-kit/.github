@@ -56,9 +56,14 @@ Active repositories carry a root `package.json` even when they do not publish a 
 The package is the local tooling contract:
 
 - `private: true` until the repository intentionally publishes an artifact.
-- `packageManager: "pnpm@11.5.1"` and `engines.node: ">=22"`.
+- `packageManager: "pnpm@11.9.0"` (the Corepack pin) and `engines: { node: ">=22.13.0", pnpm:
+">=11.9.0" }`. The Node floor is **22.13.0**, not 22: pnpm 11.9 itself requires `>=22.13`, and the
+  engine toolchain's `vite@8` (via vitest 4) requires `>=22.12` — claiming `>=22` would be untrue.
+- Add `devEngines: { runtime: { name: "node", version: "^26", onFail: "warn" } }` to express the
+  local dev line. Do **not** add `devEngines.packageManager` alongside the `packageManager` field —
+  pnpm warns and ignores `packageManager` (which Corepack needs) when both are present.
 - A root `.nvmrc` pins the **local** dev version (currently `26`, the current release line).
-  `engines.node` is the **compatibility floor**; CI runs that floor (Node 22, see below) so the
+  `engines.node` is the **compatibility floor**; CI runs that floor (Node 22.13, see below) so the
   supported range is actually verified, while contributors get the current line locally.
 - `pnpm check` is the single required local and CI gate.
 - Docs-only repositories may make `pnpm check` a lightweight formatting/lint validation.
@@ -66,11 +71,83 @@ The package is the local tooling contract:
   one-off commands as the primary contributor path.
 
 The default CI workflow is `.github/workflows/check.yml` with a job named exactly `check`, running on
-pull requests and pushes to `main`. It uses `actions/checkout@v7`, `pnpm/action-setup@v6`,
-`actions/setup-node@v6` pinned to the `engines.node` floor (`node-version: 22`) so the `>=22`
-support claim is verified — pin it explicitly, since a range like `>=22` resolves to the latest
-satisfying version, not the floor — `actions/cache@v6`, pnpm 11.5.1, a repo-local `.pnpm-store`,
-and `pnpm --config.store-dir="$PNPM_STORE_DIR" check`.
+pull requests and pushes to `main`. It uses `actions/checkout@v7`, `pnpm/action-setup@v6` (`version:
+11.9.0`), then `actions/setup-node@v6` with `node-version: 22.13.0` (pinned to the floor so the
+support claim is verified — a range resolves to latest, not the floor) **and `cache: pnpm`**, which
+uses setup-node's built-in pnpm store cache (action-setup must run first); install with `pnpm install
+--frozen-lockfile` and run `pnpm check`. This replaces the older manual `actions/cache` +
+`PNPM_STORE_DIR` dance. Two notes: pnpm 11 **fails CI on a lockfile written by a newer pnpm major**
+(no silent rewrite), a free safety net; and **SHA-pinning the actions** (e.g.
+`pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d # v6.0.5`) is the next supply-chain
+hardening step — apply it with a pinning tool (pinact) or Dependabot rather than hand-copied hashes.
+
+### Dependency intake and supply-chain
+
+In pnpm 11 **all behavioral settings live in `pnpm-workspace.yaml`** — the `pnpm` field in
+`package.json` is no longer read, and `.npmrc` is **auth-only**. Every active repo therefore carries a
+`pnpm-workspace.yaml` (even single-package: omit `packages:` and the root is included automatically)
+with this **supply-chain baseline** (validated on pnpm 11.9.0):
+
+```yaml
+allowBuilds: {} # no dependency runs install/build scripts until reviewed and listed here
+minimumReleaseAge: 1440 # skip versions published < 1 day ago (raise to 10080 for a 1-week window)
+minimumReleaseAgeExclude: [] # exempt a package when you must pull a fresh release immediately
+engineStrict: true # make engines.node a hard gate, not a warning
+nodeVersion: "22.13.0" # evaluate dependency engines against the supported floor (pnpm 11.9 needs >=22.13)
+pmOnFail: error # fail if the running pnpm differs from the packageManager pin (vs silent download)
+```
+
+`onlyBuiltDependencies` / `neverBuiltDependencies` / `ignoredBuiltDependencies` are **removed in
+v11** — `allowBuilds` (with `strictDepBuilds`, default `true`) is the build-script trust surface; add
+an entry only after reviewing a dependency that genuinely needs a postinstall. Two more rules:
+
+- **`.npmrc` is auth-only and tokens are never committed.** Since pnpm 11.5.3 a project `.npmrc` no
+  longer expands `${ENV_VAR}` for credentials, so a committed placeholder is inert anyway. Provide
+  publish/registry auth in CI via `actions/setup-node`'s `registry-url`, not a committed file.
+- **Commit `pnpm-lock.yaml`.** Resolve a lockfile merge conflict by running `pnpm install` and
+  committing the result (pnpm auto-merges) — review the diff, since it builds from the most-updated
+  side. `.gitattributes` marks the lockfile `linguist-generated` and `-diff`.
+
+### Engine-archetype tooling
+
+The check gate varies by archetype, the same way the source tier does. Docs-only and skills-pack
+repos keep `pnpm check` as a prettier formatting gate over Markdown/YAML/JSON. An **engine** repo,
+the moment it grows real TypeScript source, adopts the engine tooling standard — this is
+**archetype-scoped, not optional**: every engine conforms, and docs/skills repos must not adopt it.
+
+- **Lint/format stance: biome for code, prettier for docs.** biome formats, lints, and sorts
+  imports for TS/JS/JSON; prettier keeps Markdown/YAML. Each repo runs one formatter per file type,
+  so there is no in-repo conflict.
+- **Type and test gate:** `tsc -b` (strict, `NodeNext`, project-referenced) plus vitest with a 90%
+  coverage floor (aim 95%) — consistent with the test-driven rule once code exists.
+- **Composed gate:** `check` runs `lint` (`biome check .`) + `format:check` (prettier on docs) +
+  `typecheck` + `test`.
+- **Workspace additions** beyond the shared baseline: `savePrefix: ''` (exact pins),
+  `verifyDepsBeforeRun: warn`, `strictPeerDependencies: true`. `allowBuilds: {}` needs no entries for
+  the biome/TypeScript/vitest/esbuild toolchain (validated).
+- **Never set `preserveSymlinks: true`** in tsconfig — it breaks type resolution through pnpm's
+  symlinked `node_modules`; if symlink preservation is ever required, switch pnpm's `nodeLinker` to
+  `hoisted` instead. (Our `tsconfig.base.json` is already compliant.)
+
+The canonical, validated configs live in
+[`repo-template/archetypes/engine/`](https://github.com/agentic-workflow-kit/repo-template/tree/main/archetypes/engine)
+(`biome.json`, `tsconfig.base.json`, `tsconfig.json`, `vitest.config.ts` + an adoption guide),
+validated end-to-end on pnpm 11.9 / Node 26 with biome 2.5, TypeScript 6, and vitest 4. turbo,
+dependency-cruiser, and monorepo project references are deliberately deferred until a repo's weight
+earns them.
+
+### Releases and containers (deferred, but decided)
+
+Two mechanisms are **named now so first adoption is turnkey**, with detail in
+[`references/pnpm-hardening-2026-06-30.md`](references/pnpm-hardening-2026-06-30.md):
+
+- **Publishing → Changesets.** When a repo intentionally publishes (drops `private: true`), versioning
+  and changelogs go through `@changesets/cli` + the `changesets/action` on `main`, releasing with
+  `pnpm publish -r` and npm provenance. Not wired while every repo is `private: true`.
+- **Containers → pnpm Docker pattern.** When a repo ships an image, the standard is a multi-stage
+  build with `corepack enable`, `pnpm fetch` for cache-friendly layers (or a BuildKit
+  `--mount=type=cache,id=pnpm,target=/pnpm/store`), and `pnpm deploy` for a slim final image. No repo
+  ships a container today.
 
 ## Developer setup and worktrees
 
@@ -117,12 +194,22 @@ archived report for the `git clone --bare` walkthrough.
 
 ### pnpm store policy
 
-Our repos are single-package with light dependencies, so pnpm's fast-worktree store optimizations
-are not needed yet. Use the default global store; it is shared across a developer's worktrees within
-one trust boundary. Two rules carry forward: a shared writable store assumes mutual trust — do not
-share one store across untrusted agents or users; and revisit `enableGlobalVirtualStore` only if a
-repo grows heavy dependencies and runs many parallel worktrees. Until then, a frozen `pnpm install`
-per worktree (driven by `dev:setup`) is enough.
+The default global store is shared across a developer's worktrees within one trust boundary, and a
+frozen `pnpm install` per worktree (driven by `dev:setup`) is the baseline. Two rules always carry
+forward: a shared writable store assumes mutual trust — **do not share one store across untrusted
+agents or users**; and the lockfile is committed so every worktree resolves identically.
+
+**Engine repos may optionally enable `enableGlobalVirtualStore: true` in `pnpm-workspace.yaml`** for
+multi-worktree speed. Once a repo carries a real dependency tree (an engine's biome + TypeScript +
+vitest toolchain is ~70 packages) and is worked in more than one concurrent worktree, the global
+virtual store makes each worktree's `node_modules` symlink-only into a single content-addressable
+store, so later worktree installs are near-instant — pnpm's headline worktree optimization
+([pnpm.io/git-worktrees](https://pnpm.io/git-worktrees)). **ESM caveat:** pnpm documents that this
+does not work for ESM dependencies that import packages not declared in their own `package.json`
+(Node ignores `NODE_PATH` under ESM). Our engine packages are ESM (`type: module`), so it is
+**opt-in and validated per repo** — enable it, run the gate, and remove the setting if you hit
+resolution errors. **Docs-only and skills-pack repos skip it.** Local-dev accelerator only; CI runs a
+single checkout and is unaffected.
 
 ## Contributor contract (AGENTS.md)
 
