@@ -309,10 +309,10 @@ before any design or implementation:
 - Owned seam or artifact:
   - Local runner behavior behind the execution-plan and run-record contracts
   - Policy and approval behavior for the first supported local mode
-- Approach: `jig/docs/design/` currently names only the two seam contracts (execution-plan
-  v0, observability-records v0); nothing yet names runner behavior, the execution host, or
-  the policy posture, so entry criterion 3 below is unmet. M5 splits into a design slice
-  before an implementation slice so that gap closes before code commits around it:
+- Approach: at M5's start, `jig/docs/design/` named only the two seam contracts
+  (execution-plan v0, observability-records v0), so entry criterion 3 below was unmet. M5
+  split into a design slice before an implementation slice so that gap closed before code
+  committed around it (M5a has since landed and closed it):
   - M5a — a jig-local design slice that names the full local-runtime architecture at high
     altitude: plan validation, preview, eligibility/DAG, the runner/worker authority
     boundary, the authorization/fence, the state machine, the record store, policy, and the
@@ -344,12 +344,19 @@ before any design or implementation:
   posture are themselves exercised seams: M5a must name them concretely enough for M5b to
   build the minimal local case, even though richer hosts and policies stay extension points.
 
+  Posture here is the M5 exit target, not a status claim. M5b re-sequenced its delivery into
+  client-usable phases (jig's delivery track), which moved when each seam gets exercised; the
+  criterion-to-phase mapping below and jig's track README
+  (`jig/docs/delivery/m5b-local-mvp-r2/`) are the binding reconciliation. The post-Phase-2
+  repository review (`jig/docs/reviews/2026-07-02-post-phase-2-repo-review.md`) is the
+  routed-back finding that prompted this amendment, per Deriving Repo Plans above.
+
 - Entry criteria:
   - M1 is done.
   - M4 has produced a sample execution plan shape fixture (the shape, not a ready-to-parse
     instance — see Artifacts).
   - Jig design has named the first local execution host and the minimum policy posture.
-    Unmet as of this milestone's current state; M5a closes it.
+    Met: M5a landed (`jig/docs/design/` plus its archived M5a runtime-design note).
 - Exit criteria:
   - Jig validates and previews one minimal, machine-readable execution-plan instance.
   - Jig executes that plan as a dry-run under policy: no privileged action (push, PR
@@ -361,6 +368,20 @@ before any design or implementation:
   - The run ends in named, inspectable states.
   - Tests appropriate to the exercised surface. This is jig's first real package: `pnpm check`
     grows from prettier-only to include lint, typecheck, and test, with TDD coverage at 90%+.
+- Exit-criteria delivery status (amended 2026-07-02, from jig's delivery track r2):
+
+  | Exit criterion                                          | Status                                                               |
+  | ------------------------------------------------------- | -------------------------------------------------------------------- |
+  | Validates and previews a plan                           | Validation delivered; preview lands in jig Phase 3                   |
+  | Dry-run executes without privileged action              | Delivered (M5b Phases 1-2)                                           |
+  | Fence emits requested -> authorized/denied/runner-owned | Lands in jig Phase 3 (boolean gate recorded as ADR 0018 scaffolding) |
+  | Records match the M1 shape                              | Partial; convergence lands in jig Phase R (ADR 0017)                 |
+  | Named, inspectable states                               | Delivered (M5b Phase 2)                                              |
+  | `check` grows to lint+typecheck+test, 90%+ coverage     | Delivered (TypeScript engine-archetype migration)                    |
+
+  M5 is not exit-complete until jig's Phase R and Phase 3 land; the phases and their
+  ID-bearing acceptance criteria live in `jig/docs/delivery/m5b-local-mvp-r2/phases.md`.
+
 - Artifacts:
   - Minimal CLI or runnable entry point
   - Plan fixture — the machine-readable execution-plan instance is M5's own artifact; M4
