@@ -44,8 +44,8 @@ internals. The currently pinned seams are owned by existing layer repos.
 
 | Seam (shared artifact)                                            | Owner              | Consumers                      | Status                                                                          |
 | ----------------------------------------------------------------- | ------------------ | ------------------------------ | ------------------------------------------------------------------------------- |
-| **Execution-plan contract shape** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/execution-plan-contract-v0.md`                       |
-| **Observability / event records** — durable run output            | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/observability-records-contract-v0.md`                |
+| **Execution-plan contract shape** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/contracts/execution-plan-contract-v0.md`             |
+| **Observability / event records** — durable run output            | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/contracts/observability-records-contract-v0.md`      |
 | **Technical-design document format**                              | `technical-design` | Planning layer consumes        | v0 handoff: `technical-design/docs/design/technical-design-handoff-contract.md` |
 | **PRD / ID'd acceptance-criteria format**                         | `define-product`   | Design + Planning cite the IDs | v0 contract: `define-product/docs/product/prd-contract.md`                      |
 
@@ -85,7 +85,7 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
   (profile contract, formats, lessons ledger); legacy `docs/product/supporting-products/product-to-design.md`;
   v0.7 skill `agentic-workflow-kit:design-technical-solution`.
 
-### jig — Delivery / execution engine `[early; product drafted]`
+### jig — Delivery / execution engine `[early; walking skeleton running]`
 
 - **Role:** run an approved execution plan under policy into reviewed, landed work — or a
   deliberate, inspectable stop.
@@ -94,9 +94,11 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
   deliberately.
 - **Depends on:** a valid execution plan (its one hard input boundary). Upstream layers are
   optional strong defaults, not prerequisites.
-- **Next step:** author `docs/design/` **fresh** (reconciling to the drafted product layer),
-  then implement. The package decomposition is design-owned and intentionally empty until
-  then.
+- **Next step:** the design layer is live (both seam contracts, state tables, and an ADR log
+  reconciling to product), and M5b Phases 0-2 delivered a TypeScript walking skeleton: a
+  local dry-run CLI (`jig run` / `jig inspect`) with durable records and an enforced
+  lint+typecheck+test gate. Next is the remediation phase (Phase R) and then governed local
+  runs (Phase 3) per jig's live delivery track (`jig/docs/delivery/m5b-local-mvp-r2/`).
 - **References (curated):**
   - Product (own, drafted): `jig/docs/product/jig.md`, `guarantees.md`, `use-cases.md`,
     `concepts.md`.
