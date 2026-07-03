@@ -442,6 +442,69 @@ before any design or implementation:
   - Learning-loop PR or repo creation merged with checks green.
   - At least one sample recommendation cites the Jig record fields it used.
 
+### M7: Real Provider Integration
+
+- State: ready-for-repo-planning
+- Outcome: Enable an operator to turn an approved plan into real landed work — a real agent
+  driver doing real edits, a real execution host with proven confinement, real Forge/GitHub
+  landing, and real work-source intake — recorded in durable, inspectable records under
+  policy. This promotes Jig's M5 `named extension point` seams (agent driver, execution-host
+  driver, forge driver, work-source driver, resume, capability attestation) to `exercised`
+  behind the same contracts, with real effects replacing the reference adapters.
+- Why now: The M5 slice pinned the four provider ports, the composition root, the
+  capability-attestation gate, and the driver conformance suite as exercised, Jig-internal
+  seams — proven with reference adapters that perform no real behavior. With those contracts
+  stable and merged (Jig Phase 5, commit `f59a479`), real drivers can slot behind them without
+  churning the seams. Sequence is not serialization: M5 remains `current`, but M7 consumes the
+  pinned, merged P5 seams, so its repo planning can proceed now.
+- Primary owner: `jig`
+- Participating repos: `jig`, `.github`. Learning consumes the resulting real run records.
+- Owned seam or artifact: None new. M7 exercises the execution-plan and observability-records
+  contracts already owned by M1 and Jig, driving them through real providers rather than
+  reference adapters. It introduces no new org-level seam.
+- Entry criteria:
+  - Jig Phase 5 — provider ports, composition root, capability attestation, and the driver
+    conformance suite — is merged to Jig `main` (commit `f59a479`).
+  - The outcomes are already committed by Jig's product as ID-bearing guarantees
+    (STACK / DRIVE / SEC / MERGE / ISO / RESUME / EARN), so no new PRD or lifecycle layer is
+    stood up. This is not a new-layer milestone.
+- Exit criteria:
+  - Real drivers selected through Jig's composition root perform real effects — real agent
+    edits, confined real execution, real Forge/GitHub landing, real work-source intake — under
+    policy and against a real capability attestation, not a reference adapter.
+  - Those real effects are recorded in durable, inspectable records matching the M1
+    observability record shape, including tamper-evidence over the record chain and an active
+    re-approval path when an approved plan's basis changes.
+  - Isolation is proven per story in parallel workspaces, and freshness is decided by a real
+    clock rather than a stubbed constant; secrets are scanned and redacted on the real
+    landing path.
+  - The driver conformance suite still fails closed on a broken or non-conforming adapter.
+  - Jig's Phase-0..4 record goldens stay byte-identical under the default (reference) wiring,
+    so real drivers are opt-in and do not silently alter the proven local path.
+- Artifacts:
+  - Real driver implementations behind the existing agent, execution-host, forge, and
+    work-source ports.
+  - Real capability-attestation records and the confinement evidence they attest to.
+  - Driver conformance-suite results, including the fail-closed case on a broken adapter.
+  - Tamper-evidence and secret-redaction evidence over the real landing path.
+- Repo planning handoff:
+  - `jig` derives its repo plan directly from this milestone, decomposing the outcome into its
+    own phases and stories. Org milestones carry no story list; that decomposition lives in
+    Jig's delivery track.
+  - The real run records M7 emits strengthen M6 seeding, but M6 does not block on M7 — M6's
+    entry is already satisfiable by M1 examples or an M5 record.
+- Risks / kill assumptions:
+  - Fails if a real driver can escalate its substrate — argv, credentials, or egress — past
+    what the attestation authorized.
+  - Fails if attested isolation strength is declared rather than proven by an exercised check.
+  - Fails if real landing is not idempotent when re-run against a real effect.
+  - Fails if "real" expands into hosted, multi-tenant, or remote operation before the local
+    real path proves out. The items under `## Deferred From This Sequence` stay out of M7.
+- Evidence when landed:
+  - Jig PR(s) merged with real drivers exercised end to end and `pnpm check` green.
+  - A real run record — with attestation, tamper-evidence, and redacted secrets — can be cited
+    by Learning-loop design.
+
 ---
 
 ## Deferred From This Sequence
