@@ -22,13 +22,13 @@ repo can stay focused without inventing its own vocabulary.
 
 ## Repositories
 
-| Repo                                                                           | Role                                                                                                                                                              | Status                                                 |
-| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| [`define-product`](https://github.com/agentic-workflow-kit/define-product)     | Product layer: PRD authoring and stable, ID'd acceptance criteria upstream of design.                                                                             | Seeded; M3 contract bootstrap                          |
-| [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs.                                                                             | Built; planning handoff contract pinned                |
-| [`jig`](https://github.com/agentic-workflow-kit/jig)                           | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; local dry-run walking skeleton (M5b Phases 0-2) |
-| [`design-to-plan`](https://github.com/agentic-workflow-kit/design-to-plan)     | Planning layer: decompose approved designs into the execution-plan shape Jig runs.                                                                                | Seeded; M4 contract bootstrap                          |
-| Learning loop                                                                  | Capture run outcomes and feed them back into future work.                                                                                                         | Planned                                                |
+| Repo                                                                           | Role                                                                                                                                                              | Status                                                                                      |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| [`define-product`](https://github.com/agentic-workflow-kit/define-product)     | Product layer: PRD authoring and stable, ID'd acceptance criteria upstream of design.                                                                             | Seeded; M3 contract bootstrap                                                               |
+| [`technical-design`](https://github.com/agentic-workflow-kit/technical-design) | Design layer: frame, author, review-loop, enforce, and orchestrate technical designs.                                                                             | Built; planning handoff contract pinned                                                     |
+| [`jig`](https://github.com/agentic-workflow-kit/jig)                           | Delivery / execution engine: runs an approved plan under policy into reviewed, landed work, or a deliberate stop. The tool you run (`@agentic-workflow-kit/jig`). | Early; local dry-run walking skeleton (M5b Phases 0-2); M7 real-provider integration queued |
+| [`design-to-plan`](https://github.com/agentic-workflow-kit/design-to-plan)     | Planning layer: decompose approved designs into the execution-plan shape Jig runs.                                                                                | Seeded; M4 contract bootstrap                                                               |
+| Learning loop                                                                  | Capture run outcomes and feed them back into future work.                                                                                                         | Planned                                                                                     |
 
 ## Lifecycle
 
@@ -57,6 +57,10 @@ The shared vocabulary is intentionally small:
 The current org focus is M5: proving a narrow Jig local MVP slice now that Product, Technical
 Design, and Planning contract shapes are seeded. M4 seeded `design-to-plan` so approved technical
 designs can become Jig-ready execution plans without re-deciding product or design scope.
+
+With Jig's Phase 5 provider ports and capability-attestation gate now merged, M7 (Real Provider
+Integration) is ready for repo planning: Jig promotes its agent, execution-host, forge, and
+work-source seams from reference adapters to real drivers behind the same contracts.
 
 Start with [`define-product`](https://github.com/agentic-workflow-kit/define-product) for product
 intent and acceptance-criteria IDs, [`technical-design`](https://github.com/agentic-workflow-kit/technical-design)
