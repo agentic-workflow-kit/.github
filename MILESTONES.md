@@ -571,6 +571,13 @@ before any design or implementation:
        digest/HMAC field is added to the observability-records v0 contract. The ADR states
        this explicitly answers open question 3 and that the freeze posture is re-examined at
        the v0-freeze checkpoint (T14), not settled here.
+  8. **Contract-owner role named.** The contract owner for the two org seams jig owns
+     (execution-plan, observability-records) — the role that receives routed seam-shape
+     questions (for example, the transport session-observability question and any
+     port-surface flex) and that alone executes any v0 contract freeze at the T14
+     checkpoint — is jig's design authority: the org/product owner deciding through jig's
+     ADR flow (`docs/design/decisions/`), per M1's seam ownership. Delivery tracks and
+     sub-agents do not decide seam shapes (the repo-plan "must not decide" boundary).
 - Repo planning handoff:
   - `jig` derives its repo plan directly from this milestone, decomposing the outcome into its
     own phases and stories. Org milestones carry no story list; that decomposition lives in
