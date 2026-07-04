@@ -507,9 +507,9 @@ before any design or implementation:
   - A first-party TUI or dashboard needs product-surface design before implementation.
   - A policy analyzer should wait for enough real run-history data to avoid designing against
     synthetic or one-off examples.
-  - v0 contract freeze or package extraction is gated by the T10 records-integrity evidence
-    plus package-boundary and product decisions; if the org requires concrete transport
-    evidence for M7 exit, that evidence should also precede any freeze.
+  - v0 contract freeze or package extraction is gated by Phase 9 records-integrity evidence
+    from Jig PR #39 plus package-boundary and product decisions; if the org requires
+    concrete transport evidence for M7 exit, that evidence should also precede any freeze.
 - Risks / kill assumptions:
   - Fails if a real driver can escalate its substrate — argv, credentials, or egress — past
     what the attestation authorized.
