@@ -444,7 +444,7 @@ before any design or implementation:
 
 ### M7: Real Provider Integration
 
-- State: current
+- State: done
 - Outcome: Enable an operator to turn an approved plan into real landed work — a real agent
   driver doing real edits, a real execution host with proven confinement, real Forge/GitHub
   landing, and real work-source intake — recorded in durable, inspectable records under
@@ -509,6 +509,14 @@ before any design or implementation:
      exit. Lifecycle-edge split: no codex-plugin-cc-style lifecycle edges (broker, interrupt,
      cleanup, Windows process-tree) gate M7 exit; all of them gate the transport ADR and,
      through it, the freeze.
+     - **Exit evidence — met 2026-07-04.** EVRUN-partial merged as jig PR #45 (squash
+       `707d2114f`): a real work-source → Forge → records-integrity run against the private
+       `jig-smoke-target` sandbox with a scripted agent leg (real GitHub Issues intake, real
+       `open-pr` landing, HMAC integrity sidecar verified), committed as the citable record
+       `docs/design/evidence/2026-07-04-evrun-partial-smoke.md` under jig's evidence convention.
+       This satisfies the D-EXIT Option A condition, so M7's `State` is flipped to `done` above.
+       EVRUN-full (the Codex-driven agent leg) remains the named debt retired by the post-M7
+       Codex-transport track (N1); it is not a reopening of M7 exit.
   2. **Packaging (N2) — internal SDK boundary now, no publishing.** Rationale: extensibility and
      single-responsibility; the SDK's first-party consumers are jig's CLI and a future MCP
      surface. Packages stay `private: true`; the posture can flip to public later, and no
