@@ -585,13 +585,20 @@ before any design or implementation:
   - The real run records M7 emits strengthen M6 seeding, but M6 does not block on M7 — M6's
     entry is already satisfiable by M1 examples or an M5 record.
   - Concrete Codex transport evidence or an ADR is a post-M7 validation adjunct unless the
-    org explicitly decides that shipped transport evidence is required for M7 exit.
-  - A first-party TUI or dashboard needs product-surface design before implementation.
+    org explicitly decides that shipped transport evidence is required for M7 exit. Decided
+    2026-07-04 (Post-spine decision 1): it remains a post-M7 adjunct gating any v0 freeze,
+    not org-level exit; M7 exit evidence is the committed EVRUN-partial record.
+  - A first-party TUI or dashboard is extension-point-only (Post-spine decision 3,
+    2026-07-04): no first-party TUI cycle; reopen only on recorded operator pain.
+    Third-party surfaces build on the observability-records contract and the internal SDK
+    boundary.
   - A policy analyzer should wait for enough real run-history data to avoid designing against
     synthetic or one-off examples.
   - v0 contract freeze or package extraction is gated by Phase 9 records-integrity evidence
     from Jig PR #39 plus package-boundary and product decisions; if the org requires
     concrete transport evidence for M7 exit, that evidence should also precede any freeze.
+    The package-boundary/product decision is recorded (Post-spine decision 2); the
+    transport-evidence conditional is resolved by decision 1.
 - Risks / kill assumptions:
   - Fails if a real driver can escalate its substrate — argv, credentials, or egress — past
     what the attestation authorized.
