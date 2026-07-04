@@ -102,8 +102,10 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
   Per the 2026-07-04 post-M7 sequencing decisions (`MILESTONES.md`), the tail is now
   replanned rather than open-ended: a Codex-transport evidence-capture track and an internal
   SDK packaging boundary (no publishing) are authorized to start; a first-party TUI/dashboard
-  stays an extension-point-only non-goal; and any v0 contract freeze still waits on M7 exit
-  evidence plus the packaging and transport decisions.
+  stays an extension-point-only non-goal. M7's exit evidence landed 2026-07-04 (Jig PR #45,
+  a real work-source -> Forge -> records-integrity run), closing M7 as `done`; any v0
+  contract freeze still waits on the transport and packaging design decisions, not on M7
+  exit evidence.
 - **References (curated):**
   - Product (own, drafted): `jig/docs/product/jig.md`, `guarantees.md`, `use-cases.md`,
     `concepts.md`.
