@@ -54,14 +54,16 @@ The shared vocabulary is intentionally small:
 
 ## Current Focus
 
-The current org focus is closing the M7 Jig spine and replanning the remaining tail work now that
-Product, Technical Design, and Planning contract shapes are seeded. M4 seeded `design-to-plan` so
-approved technical designs can become Jig-ready execution plans without re-deciding product or design
-scope.
+The current org focus has moved past closing the M7 Jig spine into the post-M7 workstreams that
+replan its tail, now that Product, Technical Design, and Planning contract shapes are seeded. M4
+seeded `design-to-plan` so approved technical designs can become Jig-ready execution plans without
+re-deciding product or design scope.
 
-Jig's M7 real-provider spine is merged through PR #39 at `3b3d224`: real agent/host, Forge,
-work-source, and records-integrity behavior are exercised behind the same contracts. Remaining tail
-items are gated for replanning before implementation.
+Jig's M7 real-provider spine is merged through PR #39 at `3b3d224`, and M7 closed `done` on
+2026-07-04 once its exit evidence (Jig PR #45, a real work-source -> Forge -> records-integrity
+run) landed: real agent/host, Forge, work-source, and records-integrity behavior are exercised
+behind the same contracts. Remaining tail items (Codex-transport evidence, packaging/SDK
+boundary, v0 contract freeze) proceed as their own gated workstreams.
 
 Start with [`define-product`](https://github.com/agentic-workflow-kit/define-product) for product
 intent and acceptance-criteria IDs, [`technical-design`](https://github.com/agentic-workflow-kit/technical-design)
