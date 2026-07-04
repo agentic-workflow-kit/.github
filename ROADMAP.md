@@ -99,9 +99,11 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
   skeleton through the M7 real-provider track. Jig PR #39 merged the Phase 9
   records-integrity closeout at `3b3d224`, completing the M7 repo-track spine for real
   agent/host, Forge, work-source, and records-integrity behavior behind the same contracts.
-  Tail work now needs replanning before implementation: concrete Codex transport evidence,
-  TUI/dashboard product-surface design, policy-analyzer timing based on real run history,
-  and any contract freeze or package extraction decision.
+  Per the 2026-07-04 post-M7 sequencing decisions (`MILESTONES.md`), the tail is now
+  replanned rather than open-ended: a Codex-transport evidence-capture track and an internal
+  SDK packaging boundary (no publishing) are authorized to start; a first-party TUI/dashboard
+  stays an extension-point-only non-goal; and any v0 contract freeze still waits on M7 exit
+  evidence plus the packaging and transport decisions.
 - **References (curated):**
   - Product (own, drafted): `jig/docs/product/jig.md`, `guarantees.md`, `use-cases.md`,
     `concepts.md`.

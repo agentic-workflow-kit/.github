@@ -496,6 +496,88 @@ before any design or implementation:
   - Remaining tail items are not automatic continuation work. They require replanning before
     implementation because they carry product-surface, evidence, policy, or package-boundary
     decisions outside the Phases 6-9 spine.
+- Post-spine decisions (2026-07-04): the owner's sitting after the closeout checkpoint above.
+  These append to M7; they do not rewrite the closeout text.
+  1. **D-EXIT (M7 exit evidence) — Option A.** A committed, redacted, citable real-run evidence
+     record ("EVRUN") is mandatory for M7 exit either way. The owner accepts that its agent leg
+     may be a scripted injected session with an explicit Limitations section
+     ("EVRUN-partial"), with the Codex-driven leg ("EVRUN-full") recorded as a **named debt**
+     retired by the post-M7 Codex-transport track (N1). M7's `State` above stays `current` and
+     flips to `done` only when the EVRUN-partial record is merged — per this file's own rule
+     that a milestone is done only when exit criteria are evidenced. Concrete Codex transport
+     evidence stays a post-M7 validation adjunct gating any v0 contract freeze, not org-level
+     exit. Lifecycle-edge split: no codex-plugin-cc-style lifecycle edges (broker, interrupt,
+     cleanup, Windows process-tree) gate M7 exit; all of them gate the transport ADR and,
+     through it, the freeze.
+  2. **Packaging (N2) — internal SDK boundary now, no publishing.** Rationale: extensibility and
+     single-responsibility; the SDK's first-party consumers are jig's CLI and a future MCP
+     surface. Packages stay `private: true`; the posture can flip to public later, and no
+     stability promise is created now. The third-party (out-of-repo, installable)
+     provider-ecosystem question explicitly **remains open** as a deferred product question —
+     the packaging design must not silently assume it either way. Consequence: jig's
+     packaging/SDK-boundary design cycle (N3) is authorized to start once this decision is
+     recorded in jig's product docs.
+  3. **TUI/dashboard — extension-point-only** (per jig guarantee CFG-7). No first-party TUI
+     cycle; reopen only on recorded operator pain. Third-party surfaces are enabled through the
+     observability-records contract plus the internal SDK boundary (decision 2).
+  4. **Smoke target (operational) — hybrid.** A local bare git remote serves repeatable
+     push-path smoke tests (no credentials); a dedicated private sandbox repo
+     (`jig-smoke-target`) with a repo-scoped fine-grained PAT (env-only, never in records)
+     serves the full landing evidence (push + PR + merge + block-surfacing); an independent
+     secret-scan of any evidence record is required before it is committed.
+  5. **Merge policy for the wave.** The owner authorized autonomous squash-merge for wave-1 PRs
+     once review threads are resolved and `pnpm check` is green, except this sequencing PR
+     itself (`.github`, "docs: record post-M7 sequencing decisions and authorize wave 1"),
+     which is human-reviewed and human-merged.
+  6. **Wave-1 authorization.** The following may start once this PR records the decisions above:
+     - jig's absorption-ledger absorbed-vs-open update;
+     - jig's Codex-transport evidence-capture plan, plus a dated/hashed `evidence/` convention;
+     - jig's product amendment recording decision 2 (packaging/SDK boundary);
+     - a design-flow item for self-report-only/mock-adequacy conformance vocabulary;
+     - the EVRUN-partial evidence task, once the smoke target (decision 4) exists;
+     - M8 below, as a **proposal for owner ratification** in this PR's review — it is not
+       self-authorizing.
+
+     M6 (Learning Loop Seed) stays `proposed` and is not part of this wave-1 list; pull timing
+     remains an open org choice.
+
+  7. **Repo-plan open-question disposition** — `jig/docs/delivery/m7-real-providers/repo-plan-m7.md`
+     "Open questions to send back to the org roadmap" #1-#3, each verified against the jig ADRs
+     at the time of this sitting:
+     - **#1 — sync `describe()` vs async proof: settled by ADR 0022.**
+       [`jig/docs/design/decisions/0022-phase-6-real-driver-integration.md`](https://github.com/agentic-workflow-kit/jig/blob/main/docs/design/decisions/0022-phase-6-real-driver-integration.md),
+       Decision 3, "`describe()` stays synchronous — prove-then-describe resolves the
+       sync/async tension": the confinement proof runs async at compose time, outside
+       `describe()`, in the host driver's factory; `describe()` stays a pure getter over an
+       already-computed attestation. No P5-pinned seam surface flexes. Confirm this holds at
+       the transport-ADR session.
+     - **#2 — `action`-union / provenance record impact: settled by ADR 0023 and ADR 0024.**
+       [`jig/docs/design/decisions/0023-phase-7-real-forge-landing.md`](https://github.com/agentic-workflow-kit/jig/blob/main/docs/design/decisions/0023-phase-7-real-forge-landing.md),
+       Decision 2, repairs `LandingRequest.action` from the single mis-encoded literal
+       `'push|open-pr|merge'` to the real union `'push' | 'open-pr' | 'merge'` — a local
+       port-type fix that freezes nothing; the dry-run modeled-landing record keeps recording
+       the literal token verbatim, so the byte-identity goldens are untouched.
+       [`jig/docs/design/decisions/0024-phase-8-real-work-source.md`](https://github.com/agentic-workflow-kit/jig/blob/main/docs/design/decisions/0024-phase-8-real-work-source.md),
+       Decision 3, widens `CandidateWorkItem.provenance` from the single literal
+       `'jig-validated'` to an origin-bearing shape (source system + candidate identifier),
+       legible in the run record as an additive field alongside `run.drivers.workSource` — also
+       a local fix, no records-contract freeze required. Both ADRs confirm no
+       observability-records v0 field change was needed.
+     - **#3 — tamper-evidence contract field: resolved for now by ADR 0025.**
+       [`jig/docs/design/decisions/0025-phase-9-records-integrity.md`](https://github.com/agentic-workflow-kit/jig/blob/main/docs/design/decisions/0025-phase-9-records-integrity.md),
+       Decision 1 plus Contract Impact Gate Q5: tamper-evidence is computed over existing
+       durable evidence but materialized on a separate, non-golden integrity sidecar
+       (`runs/<id>/integrity.json`, name design-owned) with an environment-keyed HMAC; no
+       digest/HMAC field is added to the observability-records v0 contract. The ADR states
+       this explicitly answers open question 3 and that the freeze posture is re-examined at
+       the v0-freeze checkpoint (T14), not settled here.
+  8. **Contract-owner role named.** The contract owner for the two org seams jig owns
+     (execution-plan, observability-records) — the role that receives routed seam-shape
+     questions (for example, the transport session-observability question and any
+     port-surface flex) and that alone executes any v0 contract freeze at the T14
+     checkpoint — is jig's design authority: the org/product owner deciding through jig's
+     ADR flow (`docs/design/decisions/`), per M1's seam ownership. Delivery tracks and
+     sub-agents do not decide seam shapes (the repo-plan "must not decide" boundary).
 - Repo planning handoff:
   - `jig` derives its repo plan directly from this milestone, decomposing the outcome into its
     own phases and stories. Org milestones carry no story list; that decomposition lives in
@@ -503,13 +585,20 @@ before any design or implementation:
   - The real run records M7 emits strengthen M6 seeding, but M6 does not block on M7 — M6's
     entry is already satisfiable by M1 examples or an M5 record.
   - Concrete Codex transport evidence or an ADR is a post-M7 validation adjunct unless the
-    org explicitly decides that shipped transport evidence is required for M7 exit.
-  - A first-party TUI or dashboard needs product-surface design before implementation.
+    org explicitly decides that shipped transport evidence is required for M7 exit. Decided
+    2026-07-04 (Post-spine decision 1): it remains a post-M7 adjunct gating any v0 freeze,
+    not org-level exit; M7 exit evidence is the committed EVRUN-partial record.
+  - A first-party TUI or dashboard is extension-point-only (Post-spine decision 3,
+    2026-07-04): no first-party TUI cycle; reopen only on recorded operator pain.
+    Third-party surfaces build on the observability-records contract and the internal SDK
+    boundary.
   - A policy analyzer should wait for enough real run-history data to avoid designing against
     synthetic or one-off examples.
   - v0 contract freeze or package extraction is gated by Phase 9 records-integrity evidence
     from Jig PR #39 plus package-boundary and product decisions; if the org requires
     concrete transport evidence for M7 exit, that evidence should also precede any freeze.
+    The package-boundary/product decision is recorded (Post-spine decision 2); the
+    transport-evidence conditional is resolved by decision 1.
 - Risks / kill assumptions:
   - Fails if a real driver can escalate its substrate — argv, credentials, or egress — past
     what the attestation authorized.
@@ -521,6 +610,46 @@ before any design or implementation:
   - Jig PR(s) merged with real drivers exercised end to end and `pnpm check` green.
   - A real run record — with attestation, tamper-evidence, and redacted secrets — can be cited
     by Learning-loop design.
+
+### M8: Planning-discipline uplift
+
+- State: proposed — recorded here as a proposal for owner ratification in the PR that adds
+  this entry; it does not self-authorize on merge of that PR alone.
+- Outcome: Enable the Planning layer (and the layers that feed it) to reuse the durable
+  planning-discipline ideas the prev-gen authoring standard proved out, de-productized from
+  that legacy corpus rather than ported wholesale, so future planning cycles do not
+  re-discover the same lessons from scratch.
+- Why now: Raised at the 2026-07-04 post-M7 sequencing sitting alongside the M7 exit,
+  packaging, TUI, smoke-target, and merge-policy decisions, as the owner's forward-looking
+  planning-quality item for the wave after the M7 spine closed.
+- Primary owner: `design-to-plan`
+- Participating repos: `design-to-plan`, `technical-design`, `jig`, `.github`
+- Owned seam or artifact: Not yet pinned. This entry proposes the milestone; the seam or
+  artifact it owns (if any) is decided when the milestone is planned, not here.
+- Entry criteria:
+  - The owner ratifies this milestone (this entry is a proposal pending that ratification).
+  - M7's post-spine decisions above are recorded (this PR).
+- Exit criteria:
+  - Not yet defined. Per this file's Planning Rules, exit criteria are set when the milestone
+    is planned in detail, not invented ahead of that work; this proposal intentionally leaves
+    them open rather than guessing at scope the owner has not yet specified.
+- Artifacts: Not yet defined; derived when the milestone is planned.
+- Repo planning handoff:
+  - `design-to-plan` derives its own repo plan from M8 once ratified and planned.
+  - `technical-design` and `jig` participate where the de-productized ideas touch their
+    layers, but do not decide M8's scope unilaterally.
+  - Carve-out: jig's `PlanValidator` plan-ingest preflights (the Phase 8 structural intake
+    chokepoint and related plan-validation feedback) may proceed jig-locally under M4's
+    existing plan-validation-feedback ownership without waiting for M8. M8 does not gate
+    work M4 already owns.
+- Risks / kill assumptions:
+  - Fails if it re-imports the legacy authoring standard wholesale instead of de-productizing
+    only the durable ideas.
+  - Fails if it duplicates or contests M4's existing plan-validation-feedback ownership rather
+    than sitting alongside it.
+  - Fails if "planning discipline" expands into a general planning-layer rewrite instead of a
+    bounded uplift.
+- Evidence when landed: Not yet defined; recorded when the milestone is planned and delivered.
 
 ---
 
