@@ -42,12 +42,12 @@ coupled only by a small set of **shared contracts (seams)**. Pin down each seam'
 and every layer can be designed in parallel against the contract, not against another layer's
 internals. The currently pinned seams are owned by existing layer repos.
 
-| Seam (shared artifact)                                            | Owner              | Consumers                      | Status                                                                                                        |
-| ----------------------------------------------------------------- | ------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **Execution-plan contract shape** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/contracts/execution-plan-contract-v0.md`; queued for real-driver exercise under M7 |
-| **Observability / event records** — durable run output            | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/contracts/observability-records-contract-v0.md`; real run records planned under M7 |
-| **Technical-design document format**                              | `technical-design` | Planning layer consumes        | v0 handoff: `technical-design/docs/design/technical-design-handoff-contract.md`                               |
-| **PRD / ID'd acceptance-criteria format**                         | `define-product`   | Design + Planning cite the IDs | v0 contract: `define-product/docs/product/prd-contract.md`                                                    |
+| Seam (shared artifact)                                            | Owner              | Consumers                      | Status                                                                                                                           |
+| ----------------------------------------------------------------- | ------------------ | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Execution-plan contract shape** — Jig's one hard input boundary | `jig`              | Planning layer produces to it  | v0 shape: `jig/docs/design/contracts/execution-plan-contract-v0.md`; M7 real-driver spine merged through Jig PR #39              |
+| **Observability / event records** — durable run output            | `jig`              | Learning loop consumes         | v0 shape: `jig/docs/design/contracts/observability-records-contract-v0.md`; M7 records-integrity spine merged through Jig PR #39 |
+| **Technical-design document format**                              | `technical-design` | Planning layer consumes        | v0 handoff: `technical-design/docs/design/technical-design-handoff-contract.md`                                                  |
+| **PRD / ID'd acceptance-criteria format**                         | `define-product`   | Design + Planning cite the IDs | v0 contract: `define-product/docs/product/prd-contract.md`                                                                       |
 
 **Sequencing rule of thumb:** the highest-leverage early work is authoring Jig's two seams
 (execution-plan contract shape, observability records), because two downstream layers wait on their
@@ -95,14 +95,13 @@ parallel. The current sequence is tracked in [`MILESTONES.md`](./MILESTONES.md).
 - **Depends on:** a valid execution plan (its one hard input boundary). Upstream layers are
   optional strong defaults, not prerequisites.
 - **Next step:** the design layer is live (both seam contracts, state tables, and an ADR log
-  reconciling to product), and M5b Phases 0-2 delivered a TypeScript walking skeleton: a
-  local dry-run CLI (`jig run` / `jig inspect`) with durable records and an enforced
-  lint+typecheck+test gate. Next is the remediation phase (Phase R) and then governed local
-  runs (Phase 3) per jig's live delivery track (`jig/docs/delivery/m5b-local-mvp-r2/`). With
-  the Phase 5 provider ports, composition root, and capability-attestation gate now merged,
-  jig also derives its real-provider integration plan from
-  [`M7`](./MILESTONES.md) — promoting the agent, execution-host, forge, and work-source seams
-  from reference adapters to real drivers behind the same contracts.
+  reconciling to product), and the local delivery spine now runs from the M5b walking
+  skeleton through the M7 real-provider track. Jig PR #39 merged the Phase 9
+  records-integrity closeout at `3b3d224`, completing the M7 repo-track spine for real
+  agent/host, Forge, work-source, and records-integrity behavior behind the same contracts.
+  Tail work now needs replanning before implementation: concrete Codex transport evidence,
+  TUI/dashboard product-surface design, policy-analyzer timing based on real run history,
+  and any contract freeze or package extraction decision.
 - **References (curated):**
   - Product (own, drafted): `jig/docs/product/jig.md`, `guarantees.md`, `use-cases.md`,
     `concepts.md`.
