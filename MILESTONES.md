@@ -444,7 +444,7 @@ before any design or implementation:
 
 ### M7: Real Provider Integration
 
-- State: ready-for-repo-planning
+- State: current
 - Outcome: Enable an operator to turn an approved plan into real landed work — a real agent
   driver doing real edits, a real execution host with proven confinement, real Forge/GitHub
   landing, and real work-source intake — recorded in durable, inspectable records under
@@ -487,12 +487,29 @@ before any design or implementation:
   - Real capability-attestation records and the confinement evidence they attest to.
   - Driver conformance-suite results, including the fail-closed case on a broken adapter.
   - Tamper-evidence and secret-redaction evidence over the real landing path.
+- Closeout checkpoint:
+  - Jig's local M7 real-provider spine through Phases 6-9 is merged through Jig PR #39 at
+    commit `3b3d224`.
+  - The seam-level driver path and records-integrity path are complete for the M7 repo
+    track: real agent/host, Forge, work-source, and integrity behavior are exercised behind
+    Jig's existing ports and recorded under policy.
+  - Remaining tail items are not automatic continuation work. They require replanning before
+    implementation because they carry product-surface, evidence, policy, or package-boundary
+    decisions outside the Phases 6-9 spine.
 - Repo planning handoff:
   - `jig` derives its repo plan directly from this milestone, decomposing the outcome into its
     own phases and stories. Org milestones carry no story list; that decomposition lives in
     Jig's delivery track.
   - The real run records M7 emits strengthen M6 seeding, but M6 does not block on M7 — M6's
     entry is already satisfiable by M1 examples or an M5 record.
+  - Concrete Codex transport evidence or an ADR is a post-M7 validation adjunct unless the
+    org explicitly decides that shipped transport evidence is required for M7 exit.
+  - A first-party TUI or dashboard needs product-surface design before implementation.
+  - A policy analyzer should wait for enough real run-history data to avoid designing against
+    synthetic or one-off examples.
+  - v0 contract freeze or package extraction is gated by Phase 9 records-integrity evidence
+    from Jig PR #39 plus package-boundary and product decisions; if the org requires
+    concrete transport evidence for M7 exit, that evidence should also precede any freeze.
 - Risks / kill assumptions:
   - Fails if a real driver can escalate its substrate — argv, credentials, or egress — past
     what the attestation authorized.
